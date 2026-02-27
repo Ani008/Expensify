@@ -29,7 +29,6 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    // Missing declarations added here
     private RecyclerView recyclerView;
     private GroupAdapter adapter;
     private List<Group> groupList;
@@ -43,7 +42,6 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewGroups);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         groupList = new ArrayList<>();
-        // Initialize adapter early to avoid null pointer issues
         adapter = new GroupAdapter(groupList);
         recyclerView.setAdapter(adapter);
 
@@ -60,7 +58,18 @@ public class HomeFragment extends Fragment {
             });
         }
 
-
+        // --- NEW: Setup "Wallet" Tab Click Listener ---
+        View navWallet = view.findViewById(R.id.navWallet);
+        if (navWallet != null) {
+            navWallet.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new WalletFragment())
+                            // .addToBackStack(null) // Uncomment to allow back button to go back to Home
+                            .commit();
+                }
+            });
+        }
 
         // 2. Fetch Data from Firebase
         fetchGroupsFromFirebase();
@@ -70,7 +79,6 @@ public class HomeFragment extends Fragment {
 
     private void fetchGroupsFromFirebase() {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
-        // Ensure this matches the key used in your SignUpActivity
         String myPhone = sharedPreferences.getString("loggedInPhone", "");
 
         if (myPhone.isEmpty()) {
@@ -78,7 +86,6 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        // Querying the "groups" node where "creatorId" matches my phone number
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups");
         Query query = ref.orderByChild("creatorId").equalTo(myPhone);
 
@@ -99,7 +106,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                if (isAdded()) { // Check if fragment is still attached
+                if (isAdded()) {
                     Toast.makeText(getContext(), "Database Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
