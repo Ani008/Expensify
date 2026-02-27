@@ -7,7 +7,6 @@
     android:background="#FFFFFF"
     android:padding="24dp">
 
-    <!-- Header with Back Arrow -->
     <ImageView
         android:id="@+id/btnBack"
         android:layout_width="32dp"
@@ -32,7 +31,6 @@
         app:layout_constraintBottom_toBottomOf="@id/btnBack"
         app:layout_constraintStart_toEndOf="@id/btnBack" />
 
-    <!-- Group Name Input -->
     <TextView
         android:id="@+id/lblGroupName"
         android:layout_width="wrap_content"
@@ -57,70 +55,97 @@
         app:layout_constraintTop_toBottomOf="@id/lblGroupName" />
 
     <View
+        android:id="@+id/dividerName"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#EEEEEE"
         app:layout_constraintTop_toBottomOf="@id/etGroupName" />
 
-    <!-- Add Members Section -->
+    <TextView
+        android:id="@+id/lblGroupDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DESCRIPTION (OPTIONAL)"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/dividerName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/etGroupDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="What's this group for?"
+        android:background="@android:color/transparent"
+        android:paddingVertical="12dp"
+        android:textSize="16sp"
+        android:inputType="textMultiLine"
+        android:minLines="2"
+        android:maxLines="4"
+        android:gravity="top|start"
+        android:importantForAutofill="no"
+        app:layout_constraintTop_toBottomOf="@id/lblGroupDescription" />
+
+    <View
+        android:id="@+id/dividerDesc"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/etGroupDescription" />
+
     <TextView
         android:id="@+id/lblAddMembers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ADD MEMBERS"
+        android:text="NUMBER OF MEMBERS"
         android:textColor="#999999"
         android:textSize="12sp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/etGroupName"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/dividerDesc"
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
-        android:id="@+id/searchBar"
-        android:layout_width="match_parent"
+        android:id="@+id/counterLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        app:layout_constraintTop_toBottomOf="@id/lblAddMembers">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@android:drawable/ic_menu_search"
-            app:tint="#CCCCCC"
-            android:contentDescription="Search" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Search by name or phone"
-            android:background="@android:color/transparent"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:inputType="text"
-            android:importantForAutofill="no" />
-    </LinearLayout>
-
-    <!-- Member List -->
-    <LinearLayout
-        android:id="@+id/memberList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/searchBar">
+        app:layout_constraintTop_toBottomOf="@id/lblAddMembers"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="50dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Alex Rivera" android:textSize="18sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
-            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_close_clear_cancel" android:layout_alignParentEnd="true" android:layout_centerVertical="true" app:tint="#1A1A1A" android:contentDescription="Remove"/>
-        </RelativeLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnDecrease"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="-"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"
+            android:backgroundTint="#F0F0F0" />
 
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="50dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sarah Chen" android:textSize="18sp" android:textColor="#1A1A1A" android:layout_centerVertical="true"/>
-            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_close_clear_cancel" android:layout_alignParentEnd="true" android:layout_centerVertical="true" app:tint="#1A1A1A" android:contentDescription="Remove"/>
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tvMemberCount"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"
+            android:textAlignment="center" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnIncrease"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="+"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"
+            android:backgroundTint="#F0F0F0" />
     </LinearLayout>
 
-    <!-- Create Group Button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCreateGroup"
         android:layout_width="match_parent"
