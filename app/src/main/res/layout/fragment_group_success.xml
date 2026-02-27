@@ -31,9 +31,10 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@android:drawable/checkbox_on_background"
+        android:id="@+id/ivSuccessTick"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/rocket_launch"
         app:layout_constraintTop_toTopOf="@id/successCircle"
         app:layout_constraintBottom_toBottomOf="@id/successCircle"
         app:layout_constraintStart_toStartOf="@id/successCircle"

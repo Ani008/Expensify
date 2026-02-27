@@ -26,6 +26,13 @@ public class CreateGroupFragment extends Fragment {
         view.findViewById(R.id.btnCreateGroup).setOnClickListener(v -> {
             if (getActivity() != null) {
                 getActivity().getSupportFragmentManager().beginTransaction()
+                        // This applies the custom transitions for a premium feel
+                        .setCustomAnimations(
+                                R.anim.slide_up_fade_in, // Enter: Success fragment slides up
+                                R.anim.fade_out,         // Exit: Current fragment fades out
+                                R.anim.slide_up_fade_in, // PopEnter: Used if pressing the back button
+                                R.anim.fade_out          // PopExit: Used if pressing the back button
+                        )
                         .replace(R.id.fragment_container, new GroupSuccessFragment())
                         .addToBackStack(null)
                         .commit();
