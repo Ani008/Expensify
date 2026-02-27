@@ -189,4 +189,21 @@ public class GroupSuccessFragment extends Fragment {
             Toast.makeText(requireContext(), "WhatsApp is not installed.", Toast.LENGTH_LONG).show();
         }
     }
+
+    private void hideNavigation() {
+        if (getActivity() != null) {
+            View navBar = getActivity().findViewById(R.id.bottom_navigation);
+            View fab = getActivity().findViewById(R.id.fab_add);
+            View fragmentContainer = getActivity().findViewById(R.id.fragment_container);
+
+            if (navBar != null) navBar.setVisibility(View.GONE);
+            if (fab != null) fab.setVisibility(View.GONE);
+
+            if (fragmentContainer != null && fragmentContainer.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentContainer.getLayoutParams();
+                params.bottomMargin = 0;
+                fragmentContainer.requestLayout();
+            }
+        }
+    }
 }
