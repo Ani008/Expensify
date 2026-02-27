@@ -46,11 +46,14 @@ public class MainActivity extends AppCompatActivity {
 
             if (id == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
-                fabAdd.setVisibility(View.VISIBLE); // Show only on Home
-            } else {
-                // For any other tab (History, Wallet, etc.), hide the FAB
+                fabAdd.setVisibility(View.VISIBLE);
+
+            } else if (id == R.id.nav_settings) {
+                selectedFragment = new Payment();  // 👈 OPEN PAYMENT FRAGMENT
                 fabAdd.setVisibility(View.GONE);
-                // selectedFragment = new OtherFragment();
+
+            } else {
+                fabAdd.setVisibility(View.GONE);
             }
 
             if (selectedFragment != null) {
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container, selectedFragment)
                         .commit();
             }
+
             return true;
         });
 
