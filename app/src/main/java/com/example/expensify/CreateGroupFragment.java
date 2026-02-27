@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,8 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CreateGroupFragment extends Fragment {
 
-    private int memberCount = 1; // Default to 1 member
-    private DatabaseReference databaseReference; // Firebase reference
+    private int memberCount = 1;
+    private DatabaseReference databaseReference;
 
     @Nullable
     @Override
@@ -29,6 +30,7 @@ public class CreateGroupFragment extends Fragment {
 
         // 1. Initialize Firebase & Views
         databaseReference = FirebaseDatabase.getInstance().getReference("groups");
+
         EditText etGroupName = view.findViewById(R.id.etGroupName);
         EditText etGroupDescription = view.findViewById(R.id.etGroupDescription);
         Button btnDecrease = view.findViewById(R.id.btnDecrease);
@@ -36,14 +38,14 @@ public class CreateGroupFragment extends Fragment {
         Button btnIncrease = view.findViewById(R.id.btnIncrease);
         Button btnCreateGroup = view.findViewById(R.id.btnCreateGroup);
 
-        // 2. Handle Back Button (Independent)
+        // 2. Handle Back Button
         view.findViewById(R.id.btnBack).setOnClickListener(v -> {
             if (getActivity() != null) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
-        // 3. Handle Counter (Independent)
+        // 3. Handle Counter
         btnDecrease.setOnClickListener(v -> {
             if (memberCount > 1) {
                 memberCount--;
@@ -56,7 +58,7 @@ public class CreateGroupFragment extends Fragment {
             tvMemberCount.setText(String.valueOf(memberCount));
         });
 
-        // 4. Handle Create Group & Firebase (Independent)
+        // 4. Handle Create Group (THIS IS WHERE THE SAVE HAPPENS)
         btnCreateGroup.setOnClickListener(v -> {
             String groupName = etGroupName.getText().toString().trim();
             String groupDesc = etGroupDescription.getText().toString().trim();
@@ -66,16 +68,25 @@ public class CreateGroupFragment extends Fragment {
                 return;
             }
 
+            // Get Current User ID safely
+            String currentUserId = "";
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            } else {
+                Toast.makeText(getContext(), "User not logged in!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             btnCreateGroup.setEnabled(false);
             btnCreateGroup.setText("Creating...");
 
+            // Generate unique ID and create the object with the userId
             String groupId = databaseReference.push().getKey();
-            Group newGroup = new Group(groupId, groupName, groupDesc, memberCount);
+            Group newGroup = new Group(groupId, groupName, groupDesc, memberCount, currentUserId);
 
             if (groupId != null) {
                 databaseReference.child(groupId).setValue(newGroup)
                         .addOnSuccessListener(aVoid -> {
-                            // Navigate to Success Fragment with Animations
                             if (getActivity() != null) {
                                 getActivity().getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.slide_up_fade_in, R.anim.fade_out, R.anim.slide_up_fade_in, R.anim.fade_out)
@@ -92,6 +103,6 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
-        return view; // Return the view at the very end of the method
+        return view;
     }
 }
