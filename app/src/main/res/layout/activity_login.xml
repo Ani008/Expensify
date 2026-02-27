@@ -1,44 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="32dp"
-    android:gravity="center">
+    android:background="#F9F9F9"
+    android:padding="32dp">
 
+    <!-- Header Branding -->
     <TextView
+        android:id="@+id/tvBrand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome Back!"
-        android:textSize="24sp"
+        android:layout_marginTop="48dp"
+        android:letterSpacing="0.1"
+        android:text="MORPHEUS"
+        android:textColor="#1A1A1A"
+        android:textSize="14sp"
         android:textStyle="bold"
-        android:layout_marginBottom="32dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Welcome back"
+        android:textColor="#1A1A1A"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvBrand" />
+
+    <!-- Full Name Input -->
+    <TextView
+        android:id="@+id/lblFullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="FULL NAME"
+        android:textColor="#999999"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWelcome" />
 
     <EditText
         android:id="@+id/login_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username"
-        android:inputType="text" />
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:hint="Enter your full name"
+        android:inputType="textPersonName"
+        android:paddingVertical="12dp"
+        android:textColor="#1A1A1A"
+        android:textColorHint="#CCCCCC"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/lblFullName" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/login_username" />
+
+    <!-- Phone Number Input -->
+    <TextView
+        android:id="@+id/lblPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="PHONE NUMBER"
+        android:textColor="#999999"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line1" />
 
     <EditText
         android:id="@+id/login_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Phone Number"
-        android:inputType="phone" />
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:hint="+1 (555) 000-0000"
+        android:inputType="phone"
+        android:paddingVertical="12dp"
+        android:textColor="#1A1A1A"
+        android:textColorHint="#CCCCCC"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/lblPhone" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/login_phone" />
+
+    <!-- UPI ID Input -->
+    <TextView
+        android:id="@+id/lblUpi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="UPI ID"
+        android:textColor="#999999"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line2" />
 
     <EditText
         android:id="@+id/login_upi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="UPI ID"
-        android:inputType="text" />
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:hint="username@bank"
+        android:inputType="textEmailAddress"
+        android:paddingVertical="12dp"
+        android:textColor="#1A1A1A"
+        android:textColorHint="#CCCCCC"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/lblUpi" />
 
-    <Button
+    <View
+        android:id="@+id/line3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/login_upi" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Used for settling expenses directly."
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line3" />
+
+    <!-- Action Button -->
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_button"
         android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/black_button_bg"
+        android:text="Enter Workspace"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tvPrivacy" />
+
+    <TextView
+        android:id="@+id/tvPrivacy"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log In"
-        android:layout_marginTop="24dp"/>
-</LinearLayout>
+        android:layout_marginBottom="16dp"
+        android:text="Privacy Policy &amp; Terms"
+        android:textColor="#CCCCCC"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,11 @@
 package com.example.expensify;
 
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast; // Added for testing the group code
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,44 +21,87 @@ public class TimelineFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
 
-        // --- 1. NEW: Retrieve the Group Code passed from MainActivity ---
+        // --- 1. Navigation Management (Full Screen) ---
+        hideNavigation();
+
+        // --- 2. Retrieve the Group Code passed from MainActivity ---
         if (getArguments() != null) {
             currentGroupCode = getArguments().getString("GROUP_CODE");
 
             if (currentGroupCode != null) {
                 // Testing: Show a toast to prove the code successfully made it here!
-                Toast.makeText(requireContext(), "Viewing Timeline for: " + currentGroupCode, Toast.LENGTH_SHORT).show();
-
-                // TODO: Later, you will use this 'currentGroupCode' to fetch expenses from your database
+                Toast.makeText(requireContext(), "Viewing: " + currentGroupCode, Toast.LENGTH_SHORT).show();
             }
         }
 
-        // --- 2. Existing Add Expense Button Logic ---
-        View btnAddExpense = view.findViewById(R.id.btnAddExpense);
+        // --- 3. Settle Up Button Logic ---
+        View btnSettleUp = view.findViewById(R.id.btnSettleUp);
+        if (btnSettleUp != null) {
+            btnSettleUp.setOnClickListener(v -> {
+                // Open the Settlement Summary screen
+                getParentFragmentManager().beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .replace(R.id.fragment_container, new SettlementSummaryFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
 
+        // --- 4. Add Expense Button Logic ---
+        View btnAddExpense = view.findViewById(R.id.btnAddExpense);
         if (btnAddExpense != null) {
             btnAddExpense.setOnClickListener(v -> {
-                if (getActivity() != null) {
+                Fragment addExpenseFrag = new AddExpenseFragment();
 
-                    // We also need to pass this group code to the AddExpenseFragment!
-                    Fragment addExpenseFrag = new AddExpenseFragment();
-
-                    // Pack the code into a bundle so the next screen knows which group to add the expense to
-                    if (currentGroupCode != null) {
-                        Bundle args = new Bundle();
-                        args.putString("GROUP_CODE", currentGroupCode);
-                        addExpenseFrag.setArguments(args);
-                    }
-
-                    // Open the Add Expense screen
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, addExpenseFrag)
-                            .addToBackStack(null)
-                            .commit();
+                // Pass the group code forward to the next screen
+                if (currentGroupCode != null) {
+                    Bundle args = new Bundle();
+                    args.putString("GROUP_CODE", currentGroupCode);
+                    addExpenseFrag.setArguments(args);
                 }
+
+                // Open the Add Expense screen
+                getParentFragmentManager().beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .replace(R.id.fragment_container, addExpenseFrag)
+                        .addToBackStack(null)
+                        .commit();
             });
         }
 
         return view;
+    }
+
+    private void hideNavigation() {
+        if (getActivity() != null) {
+            View navBar = getActivity().findViewById(R.id.bottom_navigation);
+            View fab = getActivity().findViewById(R.id.fab_add);
+            View fragmentContainer = getActivity().findViewById(R.id.fragment_container);
+
+            if (navBar != null) navBar.setVisibility(View.GONE);
+            if (fab != null) fab.setVisibility(View.GONE);
+
+            if (fragmentContainer != null && fragmentContainer.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentContainer.getLayoutParams();
+                params.bottomMargin = 0;
+                fragmentContainer.setLayoutParams(params);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Restore bottom margin for Home screen when leaving
+        if (getActivity() != null) {
+            View fragmentContainer = getActivity().findViewById(R.id.fragment_container);
+            if (fragmentContainer != null && fragmentContainer.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentContainer.getLayoutParams();
+                int marginInPx = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
+                params.bottomMargin = marginInPx;
+                fragmentContainer.setLayoutParams(params);
+            }
+        }
     }
 }

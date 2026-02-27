@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Keeping IDs exactly as they were to match the redesigned XML
         logUsername = findViewById(R.id.login_username);
         logPhoneNo = findViewById(R.id.login_phone);
         logUpiId = findViewById(R.id.login_upi);
@@ -43,19 +44,29 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+
+        // We query by phone number as the unique identifier
         Query checkUser = reference.orderByChild("phoneNo").equalTo(userEnteredPhoneNo);
 
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Phone number found, verify other details
-                    String dbUsername = dataSnapshot.child(userEnteredPhoneNo).child("username").getValue(String.class);
-                    String dbUpiId = dataSnapshot.child(userEnteredPhoneNo).child("upiId").getValue(String.class);
+                    // Navigate to the user's specific data node
+                    DataSnapshot userSnapshot = dataSnapshot.getChildren().iterator().next();
 
-                    if (dbUsername.equals(userEnteredUsername) && dbUpiId.equals(userEnteredUpiId)) {
+                    String dbUsername = userSnapshot.child("username").getValue(String.class);
+                    String dbUpiId = userSnapshot.child("upiId").getValue(String.class);
+
+                    if (dbUsername != null && dbUsername.equals(userEnteredUsername) &&
+                            dbUpiId != null && dbUpiId.equals(userEnteredUpiId)) {
+
                         Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                        // Intent to navigate to your main app Dashboard
+
+                        // Transition to MainActivity
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(LoginActivity.this, "Incorrect Username or UPI ID", Toast.LENGTH_SHORT).show();
                     }
