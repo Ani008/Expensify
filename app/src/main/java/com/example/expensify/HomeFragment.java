@@ -18,7 +18,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -28,23 +27,21 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private GroupAdapter adapter;
-    private List<Group> groupList;
+    private List<GroupSuccessFragment.Group> groupList; // Using the Group model from Success fragment
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // 1. Initialize RecyclerView and List
+        showNavigation(); // Ensure nav is visible when returning home
+
         recyclerView = view.findViewById(R.id.recyclerViewGroups);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         groupList = new ArrayList<>();
 
-        // 2. Initialize Adapter with Click Listener
         adapter = new GroupAdapter(groupList, group -> {
-            // Navigate to TimelineFragment
             TimelineFragment timelineFragment = new TimelineFragment();
-
             Bundle bundle = new Bundle();
             bundle.putString("groupId", group.groupId);
             bundle.putString("groupName", group.groupName);
@@ -58,40 +55,38 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // CRITICAL: Set the adapter to the RecyclerView
         recyclerView.setAdapter(adapter);
-
-        // 3. Fetch Data from Firebase
-        fetchGroupsFromFirebase();
+        fetchMyGroups();
 
         return view;
     }
 
-    private void fetchGroupsFromFirebase() {
-        // Use getContext() or requireContext() safely
+    private void fetchMyGroups() {
         Context context = getContext();
         if (context == null) return;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
-        String myPhone = sharedPreferences.getString("loggedInPhone", "");
+        SharedPreferences prefs = context.getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
+        String myPhone = prefs.getString("loggedInPhone", "");
 
-        if (myPhone.isEmpty()) {
-            Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (myPhone.isEmpty()) return;
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups");
-        // Ensure your Firebase Indexing is set up for "creatorId" in the Firebase Console
-        Query query = ref.orderByChild("creatorId").equalTo(myPhone);
 
-        query.addValueEventListener(new ValueEventListener() {
+        // We listen to ALL groups and filter locally to see if the user is a member
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 groupList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    Group group = ds.getValue(Group.class);
-                    if (group != null) {
-                        groupList.add(group);
+                    // Check 1: Did I create it? OR Check 2: Am I in the members list?
+                    boolean isCreator = myPhone.equals(ds.child("creatorId").getValue(String.class));
+                    boolean isMember = ds.child("members").hasChild(myPhone);
+
+                    if (isCreator || isMember) {
+                        GroupSuccessFragment.Group group = ds.getValue(GroupSuccessFragment.Group.class);
+                        if (group != null) {
+                            groupList.add(group);
+                        }
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -99,10 +94,17 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                if (isAdded()) {
-                    Toast.makeText(getContext(), "Database Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                if (isAdded()) Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showNavigation() {
+        if (getActivity() != null) {
+            View navBar = getActivity().findViewById(R.id.bottom_navigation);
+            View fab = getActivity().findViewById(R.id.fab_add);
+            if (navBar != null) navBar.setVisibility(View.VISIBLE);
+            if (fab != null) fab.setVisibility(View.VISIBLE);
+        }
     }
 }

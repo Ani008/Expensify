@@ -15,26 +15,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 public class CreateGroupFragment extends Fragment {
 
     private int memberCount = 1;
-    private DatabaseReference databaseReference;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_group, container, false);
 
-        // 1. Hide the Bottom Navigation Bar and FAB and remove container margin
+        // 1. UI Preparation
         hideNavigation();
 
-        // Handle Back Button
-        // 1. Initialize Firebase & Views
-        databaseReference = FirebaseDatabase.getInstance().getReference("groups");
-
+        // 2. Initialize Views
         EditText etGroupName = view.findViewById(R.id.etGroupName);
         EditText etGroupDescription = view.findViewById(R.id.etGroupDescription);
         Button btnDecrease = view.findViewById(R.id.btnDecrease);
@@ -42,14 +36,14 @@ public class CreateGroupFragment extends Fragment {
         Button btnIncrease = view.findViewById(R.id.btnIncrease);
         Button btnCreateGroup = view.findViewById(R.id.btnCreateGroup);
 
-        // 2. Handle Back Button
+        // 3. Handle Back Navigation
         view.findViewById(R.id.btnBack).setOnClickListener(v -> {
-            if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().popBackStack();
+            if (getFragmentManager() != null) {
+                getFragmentManager().popBackStack();
             }
         });
 
-        // 3. Handle Counter
+        // 4. Handle Member Counter Logic
         btnDecrease.setOnClickListener(v -> {
             if (memberCount > 1) {
                 memberCount--;
@@ -62,57 +56,50 @@ public class CreateGroupFragment extends Fragment {
             tvMemberCount.setText(String.valueOf(memberCount));
         });
 
-        // 4. Handle Create Group
+        // 5. Handle "Create Group" Button Click
         btnCreateGroup.setOnClickListener(v -> {
             String groupName = etGroupName.getText().toString().trim();
             String groupDesc = etGroupDescription.getText().toString().trim();
 
+            // Validation: Group name is mandatory
             if (groupName.isEmpty()) {
                 etGroupName.setError("Please enter a group name");
                 return;
             }
 
-            // --- HACKATHON FIX: Use SharedPreferences instead of FirebaseAuth ---
+            // Retrieve the logged-in user's phone number from SharedPreferences
             SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
             String currentUserId = sharedPreferences.getString("loggedInPhone", "");
 
+            // Safety check: if session is lost, prompt login
             if (currentUserId.isEmpty()) {
-                Toast.makeText(getContext(), "Error: Session expired. Please Login again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Session expired. Please log in again.", Toast.LENGTH_SHORT).show();
                 return;
             }
-            // ---------------------------------------------------------------------
 
-            btnCreateGroup.setEnabled(false);
-            btnCreateGroup.setText("Creating...");
+            // 6. Transition to Success Screen and pass all data via Bundle
+            GroupSuccessFragment successFrag = new GroupSuccessFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("groupName", groupName);      // e.g., "Manali"
+            bundle.putString("groupDesc", groupDesc);      // e.g., "Trip with friends"
+            bundle.putInt("memberCount", memberCount);     // e.g., 2
+            bundle.putString("creatorId", currentUserId);  // e.g., "698521478" (used for username lookup)
+            successFrag.setArguments(bundle);
 
-            // Generate unique ID
-            String groupId = databaseReference.push().getKey();
-
-            // Create object with phone number as the creatorId
-            Group newGroup = new Group(groupId, groupName, groupDesc, memberCount, currentUserId);
-
-            if (groupId != null) {
-                databaseReference.child(groupId).setValue(newGroup)
-                        .addOnSuccessListener(aVoid -> {
-                            if (getActivity() != null) {
-                                getActivity().getSupportFragmentManager().beginTransaction()
-                                        .setCustomAnimations(R.anim.slide_up_fade_in, R.anim.fade_out, R.anim.slide_up_fade_in, R.anim.fade_out)
-                                        .replace(R.id.fragment_container, new GroupSuccessFragment())
-                                        .addToBackStack(null)
-                                        .commit();
-                            }
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(requireContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                            btnCreateGroup.setEnabled(true);
-                            btnCreateGroup.setText("Create Group");
-                        });
-            }
+            // Navigate with slide-up animations
+            getParentFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.slide_up_fade_in, R.anim.fade_out, R.anim.slide_up_fade_in, R.anim.fade_out)
+                    .replace(R.id.fragment_container, successFrag)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         return view;
     }
 
+    /**
+     * Hides the bottom navigation and FAB to provide a clean, focused creation experience.
+     */
     private void hideNavigation() {
         if (getActivity() != null) {
             View navBar = getActivity().findViewById(R.id.bottom_navigation);
@@ -122,10 +109,11 @@ public class CreateGroupFragment extends Fragment {
             if (navBar != null) navBar.setVisibility(View.GONE);
             if (fab != null) fab.setVisibility(View.GONE);
 
+            // Remove bottom margin of the container to use full screen space
             if (fragmentContainer != null && fragmentContainer.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentContainer.getLayoutParams();
                 params.bottomMargin = 0;
-                fragmentContainer.requestLayout();
+                fragmentContainer.setLayoutParams(params);
             }
         }
     }

@@ -18,9 +18,7 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseDatabase rootNode;
     DatabaseReference reference;
 
-    // Use a consistent name for your SharedPreferences file
     public static final String SHARED_PREFS = "ExpensifyPrefs";
-    // Key names for consistency across fragments
     public static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     public static final String KEY_USER_PHONE = "loggedInPhone";
 
@@ -28,7 +26,6 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. CHECK LOGIN STATUS FIRST
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         boolean isLoggedIn = sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
 
@@ -40,7 +37,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_sign_up);
 
-        // Initialize Views
         regUsername = findViewById(R.id.signup_username);
         regPhoneNo = findViewById(R.id.signup_phone);
         regUpiId = findViewById(R.id.signup_upi);
@@ -56,30 +52,26 @@ public class SignUpActivity extends AppCompatActivity {
                 return;
             }
 
-            // Disable button to prevent double-click
             regBtn.setEnabled(false);
 
             rootNode = FirebaseDatabase.getInstance();
-            reference = rootNode.getReference("Users");
+            // FIX: Change "Users" to "users" to match your GroupSuccessFragment
+            reference = rootNode.getReference("users");
 
-            // Create User Object
             HashMap<String, String> userData = new HashMap<>();
             userData.put("username", username);
             userData.put("phoneNo", phoneNo);
             userData.put("upiId", upiId);
 
-            // Save to Firebase under the Phone Number key
             reference.child(phoneNo).setValue(userData)
                     .addOnSuccessListener(aVoid -> {
-                        // 2. SAVE LOGIN STATE & PHONE NUMBER
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(KEY_IS_LOGGED_IN, true);
-                        editor.putString(KEY_USER_PHONE, phoneNo); // Crucial for filtering groups later
+                        editor.putString(KEY_USER_PHONE, phoneNo);
                         editor.apply();
 
                         Toast.makeText(SignUpActivity.this, "Welcome " + username, Toast.LENGTH_SHORT).show();
 
-                        // 3. NAVIGATE TO MAIN
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

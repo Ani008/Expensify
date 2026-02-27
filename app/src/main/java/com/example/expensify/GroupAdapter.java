@@ -12,14 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
-    private List<Group> groups;
+
+    // Ensure this 'Group' class is the one we standardized
+    // (with groupId, groupName, adminName, etc.)
+    private List<GroupSuccessFragment.Group> groups;
     private OnGroupClickListener listener;
 
     public interface OnGroupClickListener {
-        void onGroupClick(Group group);
+        void onGroupClick(GroupSuccessFragment.Group group);
     }
 
-    public GroupAdapter(List<Group> groups, OnGroupClickListener listener) {
+    public GroupAdapter(List<GroupSuccessFragment.Group> groups, OnGroupClickListener listener) {
         this.groups = groups;
         this.listener = listener;
     }
@@ -27,23 +30,23 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     @NonNull
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Ensure you have a layout file named item_group.xml (or similar)
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expense_group, parent, false);
         return new GroupViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
-        Group group = groups.get(position);
+        GroupSuccessFragment.Group group = groups.get(position);
 
-        // Use a null check or default value to prevent crashes
         holder.tvTitle.setText(group.groupName != null ? group.groupName : "Unnamed Group");
 
-        // Safely set the text for the member count
-        holder.tvMembers.setText(String.format("%d members", group.memberCount));
+        // UI Logic: Show the Admin name or Member count
+        // If you want to show who created it:
+        String subtitle = "By " + (group.adminName != null ? group.adminName : "Admin");
+        holder.tvMembers.setText(subtitle);
 
-        // Hardcoded for now based on your snippet
-        holder.tvStatus.setText("ALL SETTLED");
+        // Status logic (Can be made dynamic later when you add expenses)
+        holder.tvStatus.setText("ACTIVE");
         holder.progressBar.setProgress(100);
         holder.tvPercent.setText("100%");
 

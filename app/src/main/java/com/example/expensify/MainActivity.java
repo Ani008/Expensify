@@ -1,14 +1,13 @@
 package com.example.expensify;
 
-import android.content.Intent; // Added for deep links
-import android.net.Uri; // Added for deep links
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast; // Added for deep links
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,9 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 2. Handle the "+" button click
         fabAdd.setOnClickListener(v -> {
-            // When we go to Create Group, hide the FAB
             fabAdd.setVisibility(View.GONE);
-
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new CreateGroupFragment())
                     .addToBackStack(null)
@@ -52,11 +49,9 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
                 fabAdd.setVisibility(View.VISIBLE);
-
             } else if (id == R.id.nav_settings) {
-                selectedFragment = new Payment();  // 👈 OPEN PAYMENT FRAGMENT
+                selectedFragment = new Payment();
                 fabAdd.setVisibility(View.GONE);
-
             } else {
                 fabAdd.setVisibility(View.GONE);
             }
@@ -66,11 +61,10 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragment_container, selectedFragment)
                         .commit();
             }
-
             return true;
         });
 
-        // 4. IMPORTANT: Re-show the FAB when the user presses the Back button to return to Home
+        // 4. Re-show the FAB when the user returns to Home
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             if (currentFragment instanceof HomeFragment) {
@@ -80,13 +74,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 5. NEW: Check if the app was launched from a deep link
+        // 5. Check if the app was launched from a deep link
         handleDeepLink(getIntent());
     }
 
-    // --- NEW METHODS FOR DEEP LINKING ADDED BELOW ---
-
-    // Catches the link if the app is already open in the background
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -94,36 +85,38 @@ public class MainActivity extends AppCompatActivity {
         handleDeepLink(intent);
     }
 
-    // Extracts the 6-character code from the URL
-    // Extracts the 6-character code from the URL and navigates
     private void handleDeepLink(Intent intent) {
         String action = intent.getAction();
         Uri data = intent.getData();
 
-        // Check if the intent is a VIEW action and contains a URL
         if (Intent.ACTION_VIEW.equals(action) && data != null) {
+            String groupCode = null;
 
-            // Example data: https://expenseshare.app/join/X7B9Q2
-            String groupCode = data.getLastPathSegment();
+            // Check for the new Firebase Web App URL format: ?code=lYerYI
+            if (data.getQueryParameter("code") != null) {
+                groupCode = data.getQueryParameter("code");
+            }
+            // Fallback for your old path format: /join/X7B9Q2
+            else {
+                groupCode = data.getLastPathSegment();
+            }
 
             if (groupCode != null && !groupCode.isEmpty()) {
-                Toast.makeText(this, "Joining group: " + groupCode, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Invitation Received: " + groupCode, Toast.LENGTH_SHORT).show();
 
-                // 1. Hide the FAB since we are leaving the Home screen
                 if (fabAdd != null) {
                     fabAdd.setVisibility(View.GONE);
                 }
 
-                // 2. Create the fragment and pack the groupCode into a Bundle
-                Fragment groupDetailsFragment = new TimelineFragment(); // Replace with your actual fragment class
+                // Navigate specifically to the InvitationFragment as requested
+                invitation invitationFragment = new invitation();
                 Bundle args = new Bundle();
                 args.putString("GROUP_CODE", groupCode);
-                groupDetailsFragment.setArguments(args);
+                invitationFragment.setArguments(args);
 
-                // 3. Perform the Fragment Transaction
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, groupDetailsFragment)
-                        .addToBackStack(null) // Allows the user to press 'Back' to return to Home
+                        .replace(R.id.fragment_container, invitationFragment)
+                        .addToBackStack(null)
                         .commit();
             }
         }
