@@ -9,6 +9,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:clipToPadding="false">
 
         <LinearLayout
@@ -17,7 +18,6 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Header Section -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -25,12 +25,13 @@
                     android:id="@+id/tvGroupTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Japan Trip 2024"
+                    android:text="Loading..."
                     android:textColor="#1A1A1A"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/btnSettleUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -43,7 +44,6 @@
                     android:textStyle="bold" />
             </RelativeLayout>
 
-            <!-- Total Balance Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,42 +54,43 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvTotalBalanceStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="You are owed $245.50"
+                android:text="You Are Owed"
                 android:textColor="#1A1A1A"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:layout_marginTop="4dp" />
 
-            <!-- Stats Badges -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/membersCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/search_bg"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="6dp"
-                    android:text="4 active members"
+                    android:text="0 Members"
                     android:textColor="#666666"
                     android:textSize="12sp" />
                 <TextView
+                    android:id="@+id/expensesCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/search_bg"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="6dp"
-                    android:text="12 expenses"
+                    android:text="0 Expenses"
                     android:textColor="#666666"
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Activity Label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,152 +101,30 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Timeline List Items - Each in its own professional card -->
-
-            <!-- Item 1: Shinkansen Tickets -->
-            <androidx.cardview.widget.CardView
+            <LinearLayout
+                android:id="@+id/timelineContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFFFF">
-                <LinearLayout
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvEmptyState"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:orientation="horizontal">
+                    android:gravity="center"
+                    android:padding="40dp"
+                    android:text="No current expenses.\nClick 'Add Expense' to get started!"
+                    android:textColor="#CCCCCC"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
-                    <LinearLayout android:layout_width="40dp" android:layout_height="match_parent" android:gravity="center_horizontal" android:orientation="vertical">
-                        <View android:layout_width="10dp" android:layout_height="10dp" android:layout_marginTop="6dp" android:background="@android:drawable/presence_online" />
-                        <View android:layout_width="1dp" android:layout_height="match_parent" android:layout_marginTop="8dp" android:background="#EEEEEE" />
-                    </LinearLayout>
+            </LinearLayout>
 
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OCT 14" android:textColor="#999999" android:textSize="12sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Shinkansen Tickets" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Paid by You" android:textColor="#999999" android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$312.00" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SETTLED" android:textColor="#2E7D32" android:textSize="10sp" android:layout_marginTop="4dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Item 2: Omakase Dinner (Customized) -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFFFF">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout android:layout_width="40dp" android:layout_height="match_parent" android:gravity="center_horizontal" android:orientation="vertical">
-                        <View android:layout_width="10dp" android:layout_height="10dp" android:layout_marginTop="6dp" android:background="@android:drawable/presence_busy" />
-                        <View android:layout_width="1dp" android:layout_height="match_parent" android:layout_marginTop="8dp" android:background="#EEEEEE" />
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OCT 12" android:textColor="#999999" android:textSize="12sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Omakase Dinner" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Paid by Sarah Miller" android:textColor="#999999" android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$124.50" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="UNPAID" android:textColor="#FF5252" android:textSize="10sp" android:layout_marginTop="4dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Item 3: Taxi to Shibuya (Customized) -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFFFF">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout android:layout_width="40dp" android:layout_height="match_parent" android:gravity="center_horizontal" android:orientation="vertical">
-                        <View android:layout_width="10dp" android:layout_height="10dp" android:layout_marginTop="6dp" android:background="@android:drawable/presence_away" />
-                        <View android:layout_width="1dp" android:layout_height="match_parent" android:layout_marginTop="8dp" android:background="#EEEEEE" />
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OCT 11" android:textColor="#999999" android:textSize="12sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Taxi to Shibuya" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Paid by James Chen" android:textColor="#999999" android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$42.00" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PENDING" android:textColor="#FFC107" android:textSize="10sp" android:layout_marginTop="4dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Item 4: Museum Entry (Customized) -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFFFF">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout android:layout_width="40dp" android:layout_height="match_parent" android:gravity="center_horizontal" android:orientation="vertical">
-                        <View android:layout_width="10dp" android:layout_height="10dp" android:layout_marginTop="6dp" android:background="@android:drawable/presence_online" />
-                        <View android:layout_width="1dp" android:layout_height="match_parent" android:layout_marginTop="8dp" android:background="#EEEEEE" />
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OCT 10" android:textColor="#999999" android:textSize="12sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Museum Entry" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Paid by You" android:textColor="#999999" android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$58.00" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SETTLED" android:textColor="#2E7D32" android:textSize="10sp" android:layout_marginTop="4dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="24dp"
-                android:text="Load previous expenses"
-                android:textColor="#CCCCCC"
-                android:textSize="14sp" />
-
-            <!-- Bottom Spacer -->
             <View android:layout_width="match_parent" android:layout_height="120dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Add Expense Button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnAddExpense"
         android:layout_width="wrap_content"

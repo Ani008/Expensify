@@ -1,80 +1,103 @@
 package com.example.expensify;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class AddExpenseFragment extends Fragment {
+
+    private EditText etAmount, etWhatFor, etNotes;
+    private String groupId, myPhone;
+
+    // --- 1. THE DATA MODEL (Included right inside the Fragment) ---
+    public static class Expense {
+        public String expenseId, groupId, addedBy, amount, title, description, date;
+
+        public Expense() { } // Required for Firebase
+
+        public Expense(String expenseId, String groupId, String addedBy, String amount, String title, String description, String date) {
+            this.expenseId = expenseId;
+            this.groupId = groupId;
+            this.addedBy = addedBy;
+            this.amount = amount;
+            this.title = title;
+            this.description = description;
+            this.date = date;
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_expense, container, false);
 
-        // 1. Hide navigation and expand to full screen immediately
-        hideNavigation();
+        // Initialize UI Elements
+        // Ensure these IDs match exactly with your fragment_add_expense.xml
+        etAmount = view.findViewById(R.id.etAmount);
+        etWhatFor = view.findViewById(R.id.etWhatFor);
+        etNotes = view.findViewById(R.id.etNotes);
 
-        // Handle Cancel button
-        view.findViewById(R.id.btnCancel).setOnClickListener(v -> {
-            if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
+        // Get Context Data
+        if (getArguments() != null) {
+            groupId = getArguments().getString("groupId");
+        }
 
-        // Handle Add to Timeline button
-        view.findViewById(R.id.btnAddExpense).setOnClickListener(v -> {
-            if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
+        SharedPreferences sp = requireActivity().getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
+        myPhone = sp.getString("loggedInPhone", "");
+
+        // Navigation: Cancel Button
+        view.findViewById(R.id.btnCancel).setOnClickListener(v -> getParentFragmentManager().popBackStack());
+
+        // Logic: Add to Timeline Button
+        view.findViewById(R.id.btnAddExpense).setOnClickListener(v -> saveExpenseToFirebase());
 
         return view;
     }
 
-    private void hideNavigation() {
-        if (getActivity() != null) {
-            View navBar = getActivity().findViewById(R.id.bottom_navigation);
-            View fab = getActivity().findViewById(R.id.fab_add);
-            View fragmentContainer = getActivity().findViewById(R.id.fragment_container);
+    private void saveExpenseToFirebase() {
+        String amountStr = etAmount.getText().toString().trim();
+        String titleStr = etWhatFor.getText().toString().trim();
+        String descStr = etNotes.getText().toString().trim();
 
-            if (navBar != null) navBar.setVisibility(View.GONE);
-            if (fab != null) fab.setVisibility(View.GONE);
-
-            // Removed the .post() call to prevent the millisecond delay/flicker.
-            // Applying the margin change immediately during the creation phase.
-            if (fragmentContainer != null) {
-                if (fragmentContainer.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentContainer.getLayoutParams();
-                    params.bottomMargin = 0;
-                    fragmentContainer.setLayoutParams(params);
-                    // No need for requestLayout here as the fragment transition will trigger a layout pass
-                }
-            }
+        if (amountStr.isEmpty() || titleStr.isEmpty()) {
+            Toast.makeText(getContext(), "Please enter amount and title", Toast.LENGTH_SHORT).show();
+            return;
         }
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // 2. Restore the 70dp margin when leaving this fragment so the Home screen isn't cut off
-        if (getActivity() != null) {
-            View fragmentContainer = getActivity().findViewById(R.id.fragment_container);
-            if (fragmentContainer != null && fragmentContainer.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentContainer.getLayoutParams();
+        // Path: expenses -> [groupId] -> [uniqueExpenseId]
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("expenses").child(groupId);
+        String expenseId = ref.push().getKey();
 
-                // Convert 70dp to pixels to match the original activity_main.xml layout
-                int marginInPx = (int) TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
+        String currentDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
 
-                params.bottomMargin = marginInPx;
-                fragmentContainer.setLayoutParams(params);
-                fragmentContainer.requestLayout();
-            }
+        // Create the object using our inner class
+        Expense newExpense = new Expense(expenseId, groupId, myPhone, amountStr, titleStr, descStr, currentDate);
+
+        if (expenseId != null) {
+            ref.child(expenseId).setValue(newExpense).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getContext(), "Expense added successfully!", Toast.LENGTH_SHORT).show();
+                    getParentFragmentManager().popBackStack(); // Auto-return to Timeline
+                } else {
+                    Toast.makeText(getContext(), "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

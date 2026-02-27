@@ -2,13 +2,10 @@ package com.example.expensify;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,7 +26,6 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    // Missing declarations added here
     private RecyclerView recyclerView;
     private GroupAdapter adapter;
     private List<Group> groupList;
@@ -39,38 +35,44 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // 1. Initialize RecyclerView
+        // 1. Initialize RecyclerView and List
         recyclerView = view.findViewById(R.id.recyclerViewGroups);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         groupList = new ArrayList<>();
-        // Initialize adapter early to avoid null pointer issues
-        adapter = new GroupAdapter(groupList);
+
+        // 2. Initialize Adapter with Click Listener
+        adapter = new GroupAdapter(groupList, group -> {
+            // Navigate to TimelineFragment
+            TimelineFragment timelineFragment = new TimelineFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putString("groupId", group.groupId);
+            bundle.putString("groupName", group.groupName);
+            timelineFragment.setArguments(bundle);
+
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, timelineFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        // CRITICAL: Set the adapter to the RecyclerView
         recyclerView.setAdapter(adapter);
 
-        // --- Setup "Browse Templates >" Click Listener ---
-        TextView tvOpenTemplates = view.findViewById(R.id.tvOpenTemplates);
-        if (tvOpenTemplates != null) {
-            tvOpenTemplates.setOnClickListener(v -> {
-                if (getActivity() != null) {
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new template())
-                            .addToBackStack(null)
-                            .commit();
-                }
-            });
-        }
-
-
-
-        // 2. Fetch Data from Firebase
+        // 3. Fetch Data from Firebase
         fetchGroupsFromFirebase();
 
         return view;
     }
 
     private void fetchGroupsFromFirebase() {
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
-        // Ensure this matches the key used in your SignUpActivity
+        // Use getContext() or requireContext() safely
+        Context context = getContext();
+        if (context == null) return;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
         String myPhone = sharedPreferences.getString("loggedInPhone", "");
 
         if (myPhone.isEmpty()) {
@@ -78,20 +80,18 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        // Querying the "groups" node where "creatorId" matches my phone number
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups");
+        // Ensure your Firebase Indexing is set up for "creatorId" in the Firebase Console
         Query query = ref.orderByChild("creatorId").equalTo(myPhone);
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 groupList.clear();
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        Group group = ds.getValue(Group.class);
-                        if (group != null) {
-                            groupList.add(group);
-                        }
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Group group = ds.getValue(Group.class);
+                    if (group != null) {
+                        groupList.add(group);
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                if (isAdded()) { // Check if fragment is still attached
+                if (isAdded()) {
                     Toast.makeText(getContext(), "Database Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

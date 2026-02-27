@@ -13,30 +13,51 @@ import java.util.List;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
     private List<Group> groups;
+    private OnGroupClickListener listener;
 
-    public GroupAdapter(List<Group> groups) { this.groups = groups; }
+    public interface OnGroupClickListener {
+        void onGroupClick(Group group);
+    }
+
+    public GroupAdapter(List<Group> groups, OnGroupClickListener listener) {
+        this.groups = groups;
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expense_group, parent, false);
-        return new GroupViewHolder(v);
+        // Ensure you have a layout file named item_group.xml (or similar)
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expense_group, parent, false);
+        return new GroupViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         Group group = groups.get(position);
-        holder.tvTitle.setText(group.groupName);
-        holder.tvMembers.setText(group.memberCount + " members");
 
-        // Since this is a hackathon, we can set default "settled" status for new groups
+        // Use a null check or default value to prevent crashes
+        holder.tvTitle.setText(group.groupName != null ? group.groupName : "Unnamed Group");
+
+        // Safely set the text for the member count
+        holder.tvMembers.setText(String.format("%d members", group.memberCount));
+
+        // Hardcoded for now based on your snippet
         holder.tvStatus.setText("ALL SETTLED");
         holder.progressBar.setProgress(100);
         holder.tvPercent.setText("100%");
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onGroupClick(group);
+            }
+        });
     }
 
     @Override
-    public int getItemCount() { return groups.size(); }
+    public int getItemCount() {
+        return groups != null ? groups.size() : 0;
+    }
 
     static class GroupViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvMembers, tvStatus, tvPercent;
