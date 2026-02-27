@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Morpheus"
+            android:text="Expensify"
             android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="#000000" />
@@ -35,7 +35,8 @@
             android:background="@drawable/search_bg"
             android:hint="Search workspaces..."
             android:padding="12dp"
-            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawableStart="@drawable/search"
+            android:drawableTint="@color/black"
             android:drawablePadding="10dp"
             android:inputType="text"
             android:importantForAutofill="no" />

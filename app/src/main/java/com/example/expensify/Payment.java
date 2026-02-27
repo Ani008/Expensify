@@ -118,28 +118,29 @@ public class Payment extends Fragment
 
     // ✅ OPEN GOOGLE PAY
     private void startUpiPayment(String upiId, String name) {
+        // Generate a unique transaction ID every single time to avoid "Duplicate" errors
+        String uniqueTransactionId = "EXP" + System.currentTimeMillis();
 
-        Uri uri = Uri.parse("upi://pay").buildUpon()
-                .appendQueryParameter("pa", upiId)
-                .appendQueryParameter("pn", name)
-                .appendQueryParameter("tn", "Expense Payment")
-                .appendQueryParameter("am", "1")
+        Uri uri = new Uri.Builder()
+                .scheme("upi")
+                .authority("pay")
+                .appendQueryParameter("pa", upiId)      // Payee VPA
+                .appendQueryParameter("pn", name)       // Payee Name
+                .appendQueryParameter("tr", uniqueTransactionId) // MUST be unique
+                .appendQueryParameter("tn", "Expensify Payment") // Use a clean note
+                .appendQueryParameter("am", "1.00")     // Keep it low for testing
                 .appendQueryParameter("cu", "INR")
                 .build();
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
 
-        Intent chooser =
-                Intent.createChooser(intent, "Pay using");
-
-        if (chooser.resolveActivity(
-                requireActivity().getPackageManager()) != null) {
-
-            startActivityForResult(
-                    chooser,
-                    UPI_PAYMENT
-            );
+        // DONT use a chooser; let the OS show the "Pay With" dialog
+        // It's more stable for real money transfers.
+        try {
+            startActivityForResult(intent, UPI_PAYMENT);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "No UPI app found", Toast.LENGTH_SHORT).show();
         }
     }
 
