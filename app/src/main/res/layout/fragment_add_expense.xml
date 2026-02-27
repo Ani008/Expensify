@@ -29,16 +29,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/btnHeaderAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add"
-        android:textColor="#1A1A1A"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Amount Input Section -->
     <TextView
@@ -116,34 +106,26 @@
         app:layout_constraintTop_toBottomOf="@id/line2">
 
         <!-- Paid By -->
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="72dp">
+        <RelativeLayout android:id="@+id/paidByRow" android:layout_width="match_parent" android:layout_height="72dp">
+
             <ImageView android:id="@+id/imgPaid" android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_manage" android:background="@drawable/search_bg" android:padding="8dp" android:layout_centerVertical="true" app:tint="#666666"/>
             <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/imgPaid" android:layout_marginStart="16dp" android:layout_centerVertical="true">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PAID BY" android:textSize="10sp" android:textColor="#999999"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="You" android:textSize="16sp" android:textColor="#1A1A1A"/>
+                <TextView android:id="@+id/tvPaidByLabel"   android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="You" android:textSize="16sp" android:textColor="#1A1A1A"/>
             </LinearLayout>
             <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_media_play" android:layout_alignParentEnd="true" android:layout_centerVertical="true" app:tint="#CCCCCC"/>
         </RelativeLayout>
 
         <!-- Split Between -->
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="72dp">
+        <RelativeLayout android:id="@+id/splitRow" android:layout_width="match_parent" android:layout_height="72dp">
             <ImageView android:id="@+id/imgSplit" android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_share" android:background="@drawable/search_bg" android:padding="8dp" android:layout_centerVertical="true" app:tint="#666666"/>
             <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/imgSplit" android:layout_marginStart="16dp" android:layout_centerVertical="true">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SPLIT BETWEEN" android:textSize="10sp" android:textColor="#999999"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Everyone (4 people)" android:textSize="16sp" android:textColor="#1A1A1A"/>
+                <TextView android:id="@+id/tvSplitLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Everyone (4 people)" android:textSize="16sp" android:textColor="#1A1A1A"/>
             </LinearLayout>
             <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_media_play" android:layout_alignParentEnd="true" android:layout_centerVertical="true" app:tint="#CCCCCC"/>
         </RelativeLayout>
 
-        <!-- Category -->
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="72dp">
-            <ImageView android:id="@+id/imgCategory" android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_agenda" android:background="@drawable/search_bg" android:padding="8dp" android:layout_centerVertical="true" app:tint="#666666"/>
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/imgCategory" android:layout_marginStart="16dp" android:layout_centerVertical="true">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CATEGORY" android:textSize="10sp" android:textColor="#999999"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Not specified" android:textSize="16sp" android:textColor="#999999"/>
-            </LinearLayout>
-            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_media_play" android:layout_alignParentEnd="true" android:layout_centerVertical="true" app:tint="#CCCCCC"/>
-        </RelativeLayout>
     </LinearLayout>
 
     <!-- Chips (Today / Receipt) -->

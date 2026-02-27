@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/bottom_sheet_bg"> <View
+    android:layout_width="40dp"
+    android:layout_height="4dp"
+    android:background="#E0E0E0"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Split with"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#1A1A1A"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tabEqual"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Equally"
+            android:gravity="center"
+            android:padding="10dp"
+            android:background="@drawable/tab_selected"
+            android:textColor="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/tabCustom"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="#666666"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSplitMembers"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="16dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDoneSplit"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="Done"
+        android:textAllCaps="false"
+        android:background="@drawable/black_button_bg"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+</LinearLayout>

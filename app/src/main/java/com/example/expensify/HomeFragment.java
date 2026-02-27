@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,19 +28,22 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private GroupAdapter adapter;
-    private List<GroupSuccessFragment.Group> groupList; // Using the Group model from Success fragment
+    private List<GroupSuccessFragment.Group> groupList;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        showNavigation(); // Ensure nav is visible when returning home
+        // 1. Show Navigation (In case it was hidden by CreateGroupFragment)
+        showNavigation();
 
+        // 2. Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerViewGroups);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         groupList = new ArrayList<>();
 
+        // 3. Setup Adapter with Click Listener
         adapter = new GroupAdapter(groupList, group -> {
             TimelineFragment timelineFragment = new TimelineFragment();
             Bundle bundle = new Bundle();
@@ -54,35 +58,47 @@ public class HomeFragment extends Fragment {
                         .commit();
             }
         });
-
         recyclerView.setAdapter(adapter);
-        fetchMyGroups();
+
+        // 4. "Browse Templates" Click Listener
+        TextView tvOpenTemplates = view.findViewById(R.id.tvOpenTemplates);
+        if (tvOpenTemplates != null) {
+            tvOpenTemplates.setOnClickListener(v -> navigateTo(new template()));
+        }
+
+        // 6. Start Data Fetch
+        fetchGroupsFromFirebase();
 
         return view;
     }
 
-    private void fetchMyGroups() {
+    private void fetchGroupsFromFirebase() {
         Context context = getContext();
         if (context == null) return;
 
         SharedPreferences prefs = context.getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
         String myPhone = prefs.getString("loggedInPhone", "");
 
-        if (myPhone.isEmpty()) return;
+        if (myPhone.isEmpty()) {
+            Toast.makeText(context, "Please login again", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups");
 
-        // We listen to ALL groups and filter locally to see if the user is a member
+        // Real-time listener: Updates list automatically when someone joins or a group is created
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!isAdded()) return;
+
                 groupList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    // Check 1: Did I create it? OR Check 2: Am I in the members list?
-                    boolean isCreator = myPhone.equals(ds.child("creatorId").getValue(String.class));
+                    // Logic: Show if User is Creator OR User is in the Members list
+                    String creatorId = ds.child("creatorId").getValue(String.class);
                     boolean isMember = ds.child("members").hasChild(myPhone);
 
-                    if (isCreator || isMember) {
+                    if (myPhone.equals(creatorId) || isMember) {
                         GroupSuccessFragment.Group group = ds.getValue(GroupSuccessFragment.Group.class);
                         if (group != null) {
                             groupList.add(group);
@@ -94,9 +110,20 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                if (isAdded()) Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                if (isAdded()) {
+                    Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    private void navigateTo(Fragment fragment) {
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     private void showNavigation() {
@@ -105,6 +132,15 @@ public class HomeFragment extends Fragment {
             View fab = getActivity().findViewById(R.id.fab_add);
             if (navBar != null) navBar.setVisibility(View.VISIBLE);
             if (fab != null) fab.setVisibility(View.VISIBLE);
+
+            // Reset fragment container margin to accommodate bottom nav
+            View container = getActivity().findViewById(R.id.fragment_container);
+            if (container != null && container.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) container.getLayoutParams();
+                // Usually 56dp or 60dp for bottom nav
+                params.bottomMargin = (int) (60 * getResources().getDisplayMetrics().density);
+                container.setLayoutParams(params);
+            }
         }
     }
 }

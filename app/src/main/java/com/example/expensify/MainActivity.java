@@ -67,7 +67,12 @@ public class MainActivity extends AppCompatActivity implements MessageClient.OnM
             } else if (id == R.id.nav_settings) {
                 selectedFragment = new Payment();
                 fabAdd.setVisibility(View.GONE);
-            } else {
+            }
+            else if (id == R.id.nav_wallet) {
+                selectedFragment = new WalletFragment();
+                fabAdd.setVisibility(View.GONE);
+            }
+            else {
                 fabAdd.setVisibility(View.GONE);
             }
 

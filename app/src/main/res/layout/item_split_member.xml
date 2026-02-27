@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:paddingHorizontal="4dp">
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_user_placeholder"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/tvMemberName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Member Name"
+        android:textColor="#1A1A1A"
+        android:textSize="16sp"
+        android:layout_toEndOf="@id/ivAvatar"
+        android:layout_marginStart="16dp"
+        android:layout_centerVertical="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="₹"
+            android:textColor="#1A1A1A"
+            android:textSize="16sp"
+            android:layout_marginEnd="4dp"/>
+
+        <EditText
+            android:id="@+id/etMemberAmount"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:textSize="16sp"
+            android:textColor="#1A1A1A"
+            android:background="@android:color/transparent"
+            android:gravity="end" />
+    </LinearLayout>
+</RelativeLayout>
