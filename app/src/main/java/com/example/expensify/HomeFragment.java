@@ -20,6 +20,20 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         view.setBackgroundColor(Color.WHITE);
 
+        // --- NEW: Setup "Browse Templates >" Click Listener ---
+        TextView tvOpenTemplates = view.findViewById(R.id.tvOpenTemplates);
+        if (tvOpenTemplates != null) {
+            tvOpenTemplates.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    // Navigate to the fragment_templates page
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new fragment_templates())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+
         // --- SETUP CARD 1 (Europe Trip - RED) ---
         View cardEurope = view.findViewById(R.id.cardEurope);
         ((TextView) cardEurope.findViewById(R.id.tvTitle)).setText("Europe Trip 2024");

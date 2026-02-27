@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Title Header -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +26,6 @@
             android:text="Your shared journeys"
             android:textColor="#666666" />
 
-        <!-- Search Bar -->
         <EditText
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -41,25 +39,33 @@
             android:inputType="text"
             android:importantForAutofill="no" />
 
-        <!-- The Three Cards Section -->
+        <TextView
+            android:id="@+id/tvOpenTemplates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:text="Browse Templates >"
+            android:textColor="#1A1A1A"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingVertical="4dp"
+            android:paddingStart="8dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:orientation="vertical">
 
-            <!-- Card 1: Europe Trip (Red) -->
             <include android:id="@+id/cardEurope" layout="@layout/item_expense_group" />
 
-            <!-- Card 2: Flatmates (Green) -->
             <include android:id="@+id/cardFlatmates" layout="@layout/item_expense_group" />
 
-            <!-- Card 3: Office Lunch (Blue) -->
             <include android:id="@+id/cardOffice" layout="@layout/item_expense_group" />
 
         </LinearLayout>
 
-        <!-- Bottom Placeholder Box -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
