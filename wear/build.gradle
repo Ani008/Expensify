@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace 'com.example.wear'
+    namespace 'com.example.expensify'
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId "com.example.wear"
+        applicationId "com.example.expensify"
         minSdk 30
         targetSdk 36
         versionCode 1
@@ -32,4 +32,5 @@ android {
 dependencies {
     implementation libs.play.services.wearable
     implementation libs.wear
+    implementation 'com.google.android.gms:play-services-wearable:18.1.0' // Use the latest version
 }
