@@ -1,18 +1,35 @@
 package com.example.expensify;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private GroupAdapter adapter;
+    private List<Group> groupList;
 
     @Nullable
     @Override
@@ -20,38 +37,48 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         view.setBackgroundColor(Color.WHITE);
 
-        // --- SETUP CARD 1 (Europe Trip - RED) ---
-        View cardEurope = view.findViewById(R.id.cardEurope);
-        ((TextView) cardEurope.findViewById(R.id.tvTitle)).setText("Europe Trip 2024");
-        ((TextView) cardEurope.findViewById(R.id.tvStatus)).setText("YOU OWE ₹450");
-        // Background is red by default from our previous item layout
+        // 1. Initialize RecyclerView
+        recyclerView = view.findViewById(R.id.recyclerViewGroups);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        groupList = new ArrayList<>();
 
-        // --- SETUP CARD 2 (Flatmates - GREEN) ---
-        View cardFlatmates = view.findViewById(R.id.cardFlatmates);
-        TextView tvStatusFlat = cardFlatmates.findViewById(R.id.tvStatus);
-        ((TextView) cardFlatmates.findViewById(R.id.tvTitle)).setText("Flatmates");
-        ((TextView) cardFlatmates.findViewById(R.id.tvMembers)).setText("3 members");
-        ((TextView) cardFlatmates.findViewById(R.id.tvLabel)).setText("SETTLEMENT");
-        ((TextView) cardFlatmates.findViewById(R.id.tvPercent)).setText("100%");
-        ((ProgressBar) cardFlatmates.findViewById(R.id.progressBar)).setProgress(100);
-
-        tvStatusFlat.setText("ALL SETTLED");
-        tvStatusFlat.setTextColor(Color.parseColor("#2E7D32")); // Dark Green text
-        tvStatusFlat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.status_tag_bg_green));
-
-        // --- SETUP CARD 3 (Office Lunch - BLUE) ---
-        View cardOffice = view.findViewById(R.id.cardOffice);
-        TextView tvStatusOffice = cardOffice.findViewById(R.id.tvStatus);
-        ((TextView) cardOffice.findViewById(R.id.tvTitle)).setText("Office Lunch");
-        ((TextView) cardOffice.findViewById(R.id.tvMembers)).setText("12 members");
-        ((TextView) cardOffice.findViewById(R.id.tvLabel)).setText("COLLECTION");
-        ((TextView) cardOffice.findViewById(R.id.tvPercent)).setText("75%");
-        ((ProgressBar) cardOffice.findViewById(R.id.progressBar)).setProgress(75);
-
-        tvStatusOffice.setText("YOU ARE OWED ₹1,200");
-        tvStatusOffice.setTextColor(Color.parseColor("#1565C0")); // Dark Blue text
-        tvStatusOffice.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.status_tag_bg_blue));
+        // 2. Fetch Data from Firebase
+        fetchGroupsFromFirebase();
 
         return view;
+    }
+
+    private void fetchGroupsFromFirebase() {
+        // Get the phone number we saved in SignUpActivity
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
+        String myPhone = sharedPreferences.getString("loggedInPhone", "");
+
+        if (myPhone.isEmpty()) return;
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups");
+
+        // Filter: Only fetch groups where creatorId == my logged-in phone number
+        Query query = ref.orderByChild("creatorId").equalTo(myPhone);
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                groupList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Group group = ds.getValue(Group.class);
+                    if (group != null) {
+                        groupList.add(group);
+                    }
+                }
+                // 3. Set/Update Adapter
+                adapter = new GroupAdapter(groupList);
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

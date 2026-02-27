@@ -1,6 +1,5 @@
 package com.example.expensify;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,38 +18,35 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseDatabase rootNode;
     DatabaseReference reference;
 
-    // Define a name for your SharedPreferences file
+    // Use a consistent name for your SharedPreferences file
     public static final String SHARED_PREFS = "ExpensifyPrefs";
+    // Key names for consistency across fragments
+    public static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+    public static final String KEY_USER_PHONE = "loggedInPhone";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // 1. CHECK LOGIN STATUS FIRST
-        // Before even loading the UI, check if the user is already logged in
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        boolean isLoggedIn = sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
 
         if (isLoggedIn) {
-            // User is already logged in, navigate directly to MainActivity
-            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish(); // Close SignUpActivity so the user can't press the back button to return here
-            return;   // Stop executing the rest of onCreate
+            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+            finish();
+            return;
         }
 
-        // If not logged in, load the Sign-Up UI
         setContentView(R.layout.activity_sign_up);
 
+        // Initialize Views
         regUsername = findViewById(R.id.signup_username);
         regPhoneNo = findViewById(R.id.signup_phone);
         regUpiId = findViewById(R.id.signup_upi);
         regBtn = findViewById(R.id.signup_button);
 
         regBtn.setOnClickListener(view -> {
-            rootNode = FirebaseDatabase.getInstance();
-            reference = rootNode.getReference("Users");
-
             String username = regUsername.getText().toString().trim();
             String phoneNo = regPhoneNo.getText().toString().trim();
             String upiId = regUpiId.getText().toString().trim();
@@ -60,29 +56,37 @@ public class SignUpActivity extends AppCompatActivity {
                 return;
             }
 
+            // Disable button to prevent double-click
+            regBtn.setEnabled(false);
+
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("Users");
+
+            // Create User Object
             HashMap<String, String> userData = new HashMap<>();
             userData.put("username", username);
             userData.put("phoneNo", phoneNo);
             userData.put("upiId", upiId);
 
+            // Save to Firebase under the Phone Number key
             reference.child(phoneNo).setValue(userData)
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(SignUpActivity.this, "Sign Up Successful!", Toast.LENGTH_SHORT).show();
-
-                        // 2. SAVE LOGIN STATE
-                        // Save to SharedPreferences that the user is now logged in
+                        // 2. SAVE LOGIN STATE & PHONE NUMBER
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("isLoggedIn", true);
-                        editor.putString("phoneNo", phoneNo); // Save phone number to fetch their specific data later
+                        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+                        editor.putString(KEY_USER_PHONE, phoneNo); // Crucial for filtering groups later
                         editor.apply();
 
-                        // 3. NAVIGATE TO MAIN ACTIVITY
+                        Toast.makeText(SignUpActivity.this, "Welcome " + username, Toast.LENGTH_SHORT).show();
+
+                        // 3. NAVIGATE TO MAIN
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                         startActivity(intent);
-                        finish(); // Destroy the Sign-Up activity
+                        finish();
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(SignUpActivity.this, "Failed to save: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        regBtn.setEnabled(true);
+                        Toast.makeText(SignUpActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     });
         });
     }

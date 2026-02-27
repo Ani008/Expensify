@@ -1,5 +1,7 @@
 package com.example.expensify;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-// Import Firebase classes
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -58,7 +58,7 @@ public class CreateGroupFragment extends Fragment {
             tvMemberCount.setText(String.valueOf(memberCount));
         });
 
-        // 4. Handle Create Group (THIS IS WHERE THE SAVE HAPPENS)
+        // 4. Handle Create Group
         btnCreateGroup.setOnClickListener(v -> {
             String groupName = etGroupName.getText().toString().trim();
             String groupDesc = etGroupDescription.getText().toString().trim();
@@ -68,20 +68,23 @@ public class CreateGroupFragment extends Fragment {
                 return;
             }
 
-            // Get Current User ID safely
-            String currentUserId = "";
-            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            } else {
-                Toast.makeText(getContext(), "User not logged in!", Toast.LENGTH_SHORT).show();
+            // --- HACKATHON FIX: Use SharedPreferences instead of FirebaseAuth ---
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
+            String currentUserId = sharedPreferences.getString("loggedInPhone", "");
+
+            if (currentUserId.isEmpty()) {
+                Toast.makeText(getContext(), "Error: Session expired. Please Login again.", Toast.LENGTH_SHORT).show();
                 return;
             }
+            // ---------------------------------------------------------------------
 
             btnCreateGroup.setEnabled(false);
             btnCreateGroup.setText("Creating...");
 
-            // Generate unique ID and create the object with the userId
+            // Generate unique ID
             String groupId = databaseReference.push().getKey();
+
+            // Create object with phone number as the creatorId
             Group newGroup = new Group(groupId, groupName, groupDesc, memberCount, currentUserId);
 
             if (groupId != null) {

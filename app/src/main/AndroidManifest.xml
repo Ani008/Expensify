@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,31 +16,35 @@
         android:theme="@style/Theme.Expensify">
 
         <activity
-            android:name=".SignUpActivity"
-            android:exported="false"/>
-
-        <activity android:name=".LoginActivity"
-            android:exported="false"/>
+            android:name=".LoginActivity"
+            android:exported="true" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".SignUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="expensify"
+                <data
+                    android:scheme="expensify"
                     android:host="expenseshare.app"
                     android:pathPrefix="/join/" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
