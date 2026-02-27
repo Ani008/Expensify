@@ -7,7 +7,6 @@
     android:background="#FFFFFF"
     android:padding="24dp">
 
-    <!-- Close Button -->
     <ImageView
         android:id="@+id/btnClose"
         android:layout_width="24dp"
@@ -16,9 +15,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="#999999"
-        android:contentDescription="Close" />
+        android:contentDescription="Close"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true" />
 
-    <!-- Success Icon -->
     <View
         android:id="@+id/successCircle"
         android:layout_width="80dp"
@@ -65,7 +66,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Invite Link Box -->
     <LinearLayout
         android:id="@+id/linkBox"
         android:layout_width="match_parent"
@@ -78,13 +78,16 @@
         app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
 
         <TextView
+            android:id="@+id/tvInviteLink"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="12dp"
             android:text="expenseshare.app/join/summer-tri..."
             android:textColor="#1A1A1A"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/btnCopy"
@@ -95,10 +98,40 @@
             android:paddingHorizontal="20dp"
             android:text="Copy"
             android:textColor="#2962FF"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btnShareWhatsapp"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/search_bg"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toBottomOf="@id/linkBox">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/whatsapp"
+            android:scaleType="fitCenter"
+            android:contentDescription="WhatsApp Icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Share via WhatsApp"
+            android:textColor="#1A1A1A"
+            android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Go to Timeline Button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnTimeline"
         android:layout_width="match_parent"
@@ -109,7 +142,7 @@
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="40dp" />
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

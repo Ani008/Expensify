@@ -1,10 +1,15 @@
 package com.example.expensify;
 
+import android.content.Intent; // Added for deep links
+import android.net.Uri; // Added for deep links
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast; // Added for deep links
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -70,5 +75,53 @@ public class MainActivity extends AppCompatActivity {
                 fabAdd.setVisibility(View.GONE);
             }
         });
+
+        // 5. NEW: Check if the app was launched from a deep link
+        handleDeepLink(getIntent());
+    }
+
+    // --- NEW METHODS FOR DEEP LINKING ADDED BELOW ---
+
+    // Catches the link if the app is already open in the background
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleDeepLink(intent);
+    }
+
+    // Extracts the 6-character code from the URL
+    // Extracts the 6-character code from the URL and navigates
+    private void handleDeepLink(Intent intent) {
+        String action = intent.getAction();
+        Uri data = intent.getData();
+
+        // Check if the intent is a VIEW action and contains a URL
+        if (Intent.ACTION_VIEW.equals(action) && data != null) {
+
+            // Example data: https://expenseshare.app/join/X7B9Q2
+            String groupCode = data.getLastPathSegment();
+
+            if (groupCode != null && !groupCode.isEmpty()) {
+                Toast.makeText(this, "Joining group: " + groupCode, Toast.LENGTH_SHORT).show();
+
+                // 1. Hide the FAB since we are leaving the Home screen
+                if (fabAdd != null) {
+                    fabAdd.setVisibility(View.GONE);
+                }
+
+                // 2. Create the fragment and pack the groupCode into a Bundle
+                Fragment groupDetailsFragment = new TimelineFragment(); // Replace with your actual fragment class
+                Bundle args = new Bundle();
+                args.putString("GROUP_CODE", groupCode);
+                groupDetailsFragment.setArguments(args);
+
+                // 3. Perform the Fragment Transaction
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, groupDetailsFragment)
+                        .addToBackStack(null) // Allows the user to press 'Back' to return to Home
+                        .commit();
+            }
+        }
     }
 }

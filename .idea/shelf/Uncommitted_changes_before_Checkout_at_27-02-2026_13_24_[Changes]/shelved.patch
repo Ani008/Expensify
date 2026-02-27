@@ -1,0 +1,257 @@
+Index: app/src/main/java/com/example/expensify/GroupSuccessFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.expensify;\r\n\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Toast;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\n\r\npublic class GroupSuccessFragment extends Fragment {\r\n    @Nullable\r\n    @Override\r\n    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {\r\n        View view = inflater.inflate(R.layout.fragment_group_success, container, false);\r\n\r\n        // 1. Handle Copy Link\r\n        view.findViewById(R.id.btnCopy).setOnClickListener(v ->\r\n                Toast.makeText(getContext(), \"Link copied to clipboard!\", Toast.LENGTH_SHORT).show()\r\n        );\r\n\r\n        // 2. Handle Close Button (X) - Goes back to the previous screen (Home)\r\n        view.findViewById(R.id.btnClose).setOnClickListener(v ->\r\n                getActivity().getSupportFragmentManager().popBackStack()\r\n        );\r\n\r\n        // 3. Handle \"Go to Timeline\" Button - Opens the TimelineFragment\r\n        view.findViewById(R.id.btnTimeline).setOnClickListener(v -> {\r\n            if (getActivity() != null) {\r\n                getActivity().getSupportFragmentManager().beginTransaction()\r\n                        .replace(R.id.fragment_container, new TimelineFragment())\r\n                        .addToBackStack(null)\r\n                        .commit();\r\n            }\r\n        });\r\n\r\n        return view;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/expensify/GroupSuccessFragment.java b/app/src/main/java/com/example/expensify/GroupSuccessFragment.java
+--- a/app/src/main/java/com/example/expensify/GroupSuccessFragment.java	(revision 5b82bca88db3e779cb42a3f4f888e8bc83c9edf1)
++++ b/app/src/main/java/com/example/expensify/GroupSuccessFragment.java	(date 1772173502293)
+@@ -1,40 +1,95 @@
+ package com.example.expensify;
+ 
++import android.content.ActivityNotFoundException;
++import android.content.ClipData;
++import android.content.ClipboardManager;
++import android.content.Context;
++import android.content.Intent;
+ import android.os.Bundle;
+-import android.view.LayoutInflater;
+ import android.view.View;
+-import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.LinearLayout;
++import android.widget.TextView;
+ import android.widget.Toast;
++
+ import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
++import androidx.appcompat.widget.AppCompatButton;
+ import androidx.fragment.app.Fragment;
+ 
+ public class GroupSuccessFragment extends Fragment {
+-    @Nullable
++
++    // Passing the layout directly to the constructor
++    public GroupSuccessFragment() {
++        super(R.layout.fragment_group_success);
++    }
++
+     @Override
+-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+-        View view = inflater.inflate(R.layout.fragment_group_success, container, false);
++    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
++        super.onViewCreated(view, savedInstanceState);
+ 
+-        // 1. Handle Copy Link
+-        view.findViewById(R.id.btnCopy).setOnClickListener(v ->
+-                Toast.makeText(getContext(), "Link copied to clipboard!", Toast.LENGTH_SHORT).show()
+-        );
++        // 1. Initialize Views
++        ImageView btnClose = view.findViewById(R.id.btnClose);
++        TextView btnCopy = view.findViewById(R.id.btnCopy);
++        TextView tvInviteLink = view.findViewById(R.id.tvInviteLink);
++        LinearLayout btnShareWhatsapp = view.findViewById(R.id.btnShareWhatsapp);
++        AppCompatButton btnTimeline = view.findViewById(R.id.btnTimeline);
+ 
+-        // 2. Handle Close Button (X) - Goes back to the previous screen (Home)
+-        view.findViewById(R.id.btnClose).setOnClickListener(v ->
+-                getActivity().getSupportFragmentManager().popBackStack()
+-        );
++        // Define your actual invite link (You'll likely pass this in via arguments later)
++        String fullInviteLink = "https://expenseshare.app/join/summer-trip-2026";
+ 
+-        // 3. Handle "Go to Timeline" Button - Opens the TimelineFragment
+-        view.findViewById(R.id.btnTimeline).setOnClickListener(v -> {
++        // Optional: Update the UI text to match the link (truncated if necessary)
++        tvInviteLink.setText(fullInviteLink);
++
++        // 2. Close Button Logic
++        btnClose.setOnClickListener(v -> {
+             if (getActivity() != null) {
+-                getActivity().getSupportFragmentManager().beginTransaction()
+-                        .replace(R.id.fragment_container, new TimelineFragment())
+-                        .addToBackStack(null)
+-                        .commit();
++                getActivity().getSupportFragmentManager().popBackStack();
+             }
+         });
+ 
+-        return view;
++        // 3. Copy Link Logic
++        btnCopy.setOnClickListener(v -> copyToClipboard(fullInviteLink));
++
++        // 4. WhatsApp Share Logic
++        btnShareWhatsapp.setOnClickListener(v -> {
++            String message = "Hey! I just created a group. Join me using this link:\n" + fullInviteLink;
++            shareToWhatsApp(message);
++        });
++
++        // 5. OK / Timeline Button Logic
++        btnTimeline.setOnClickListener(v -> {
++            // Replace this with your actual navigation code
++            Toast.makeText(requireContext(), "Opening Group Timeline...", Toast.LENGTH_SHORT).show();
++            if (getActivity() != null) {
++                getActivity().getSupportFragmentManager().popBackStack();
++            }
++        });
++    }
++
++    // Helper method for Clipboard
++    private void copyToClipboard(String textToCopy) {
++        ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
++        ClipData clip = ClipData.newPlainText("Group Invite Link", textToCopy);
++
++        if (clipboard != null) {
++            clipboard.setPrimaryClip(clip);
++            Toast.makeText(requireContext(), "Link copied to clipboard!", Toast.LENGTH_SHORT).show();
++        }
++    }
++
++    // Helper method for WhatsApp Intent
++    private void shareToWhatsApp(String message) {
++        Intent intent = new Intent(Intent.ACTION_SEND);
++        intent.setType("text/plain");
++        intent.setPackage("com.whatsapp"); // Targets standard WhatsApp
++        intent.putExtra(Intent.EXTRA_TEXT, message);
++
++        try {
++            startActivity(intent);
++        } catch (ActivityNotFoundException e) {
++            // Failsafe: Triggers if the user does not have WhatsApp installed
++            Toast.makeText(requireContext(), "WhatsApp is not installed on this device.", Toast.LENGTH_LONG).show();
++        }
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/expensify/TimelineFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.expensify;\r\n\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\n\r\npublic class TimelineFragment extends Fragment {\r\n\r\n    @Nullable\r\n    @Override\r\n    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {\r\n        View view = inflater.inflate(R.layout.fragment_timeline, container, false);\r\n\r\n        // This looks for the ID we just added in the XML\r\n        View btnAddExpense = view.findViewById(R.id.btnAddExpense);\r\n\r\n        if (btnAddExpense != null) {\r\n            btnAddExpense.setOnClickListener(v -> {\r\n                if (getActivity() != null) {\r\n                    // This opens the Add Expense screen\r\n                    getActivity().getSupportFragmentManager().beginTransaction()\r\n                            .replace(R.id.fragment_container, new AddExpenseFragment())\r\n                            .addToBackStack(null)\r\n                            .commit();\r\n                }\r\n            });\r\n        }\r\n\r\n        return view;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/expensify/TimelineFragment.java b/app/src/main/java/com/example/expensify/TimelineFragment.java
+--- a/app/src/main/java/com/example/expensify/TimelineFragment.java	(revision 5b82bca88db3e779cb42a3f4f888e8bc83c9edf1)
++++ b/app/src/main/java/com/example/expensify/TimelineFragment.java	(date 1772172934535)
+@@ -32,4 +32,7 @@
+ 
+         return view;
+     }
++
++    public static class GroupSuccessFragment {
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_group_success.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"#FFFFFF\"\r\n    android:padding=\"24dp\">\r\n\r\n    <!-- Close Button -->\r\n    <ImageView\r\n        android:id=\"@+id/btnClose\"\r\n        android:layout_width=\"24dp\"\r\n        android:layout_height=\"24dp\"\r\n        android:src=\"@android:drawable/ic_menu_close_clear_cancel\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:tint=\"#999999\"\r\n        android:contentDescription=\"Close\" />\r\n\r\n    <!-- Success Icon -->\r\n    <View\r\n        android:id=\"@+id/successCircle\"\r\n        android:layout_width=\"80dp\"\r\n        android:layout_height=\"80dp\"\r\n        android:layout_marginTop=\"40dp\"\r\n        android:background=\"@drawable/success_circle_bg\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/btnClose\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\" />\r\n\r\n    <ImageView\r\n        android:layout_width=\"40dp\"\r\n        android:layout_height=\"40dp\"\r\n        android:src=\"@android:drawable/checkbox_on_background\"\r\n        app:layout_constraintTop_toTopOf=\"@id/successCircle\"\r\n        app:layout_constraintBottom_toBottomOf=\"@id/successCircle\"\r\n        app:layout_constraintStart_toStartOf=\"@id/successCircle\"\r\n        app:layout_constraintEnd_toEndOf=\"@id/successCircle\"\r\n        app:tint=\"#1A1A1A\"\r\n        android:contentDescription=\"Success\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvTitle\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Group Created\"\r\n        android:textColor=\"#1A1A1A\"\r\n        android:textSize=\"28sp\"\r\n        android:textStyle=\"bold\"\r\n        android:layout_marginTop=\"24dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/successCircle\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvSubtitle\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Share the link to invite others.\"\r\n        android:textColor=\"#757575\"\r\n        android:textSize=\"16sp\"\r\n        android:layout_marginTop=\"8dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/tvTitle\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\" />\r\n\r\n    <!-- Invite Link Box -->\r\n    <LinearLayout\r\n        android:id=\"@+id/linkBox\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"56dp\"\r\n        android:layout_marginTop=\"40dp\"\r\n        android:orientation=\"horizontal\"\r\n        android:gravity=\"center_vertical\"\r\n        android:padding=\"4dp\"\r\n        android:background=\"@drawable/search_bg\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/tvSubtitle\">\r\n\r\n        <TextView\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:paddingStart=\"12dp\"\r\n            android:text=\"expenseshare.app/join/summer-tri...\"\r\n            android:textColor=\"#1A1A1A\"\r\n            android:textSize=\"14sp\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/btnCopy\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"match_parent\"\r\n            android:background=\"@drawable/search_bg\"\r\n            android:gravity=\"center\"\r\n            android:paddingHorizontal=\"20dp\"\r\n            android:text=\"Copy\"\r\n            android:textColor=\"#2962FF\"\r\n            android:textStyle=\"bold\" />\r\n    </LinearLayout>\r\n\r\n    <!-- Go to Timeline Button -->\r\n    <androidx.appcompat.widget.AppCompatButton\r\n        android:id=\"@+id/btnTimeline\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"60dp\"\r\n        android:background=\"@drawable/blue_button_bg\"\r\n        android:text=\"OK\"\r\n        android:textAllCaps=\"false\"\r\n        android:textColor=\"#FFFFFF\"\r\n        android:textSize=\"18sp\"\r\n        android:textStyle=\"bold\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        android:layout_marginBottom=\"40dp\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_group_success.xml b/app/src/main/res/layout/fragment_group_success.xml
+--- a/app/src/main/res/layout/fragment_group_success.xml	(revision 5b82bca88db3e779cb42a3f4f888e8bc83c9edf1)
++++ b/app/src/main/res/layout/fragment_group_success.xml	(date 1772173779374)
+@@ -7,7 +7,6 @@
+     android:background="#FFFFFF"
+     android:padding="24dp">
+ 
+-    <!-- Close Button -->
+     <ImageView
+         android:id="@+id/btnClose"
+         android:layout_width="24dp"
+@@ -16,9 +15,11 @@
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:tint="#999999"
+-        android:contentDescription="Close" />
++        android:contentDescription="Close"
++        android:background="?attr/selectableItemBackgroundBorderless"
++        android:clickable="true"
++        android:focusable="true" />
+ 
+-    <!-- Success Icon -->
+     <View
+         android:id="@+id/successCircle"
+         android:layout_width="80dp"
+@@ -65,7 +66,6 @@
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent" />
+ 
+-    <!-- Invite Link Box -->
+     <LinearLayout
+         android:id="@+id/linkBox"
+         android:layout_width="match_parent"
+@@ -78,13 +78,16 @@
+         app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
+ 
+         <TextView
++            android:id="@+id/tvInviteLink"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:paddingStart="12dp"
+             android:text="expenseshare.app/join/summer-tri..."
+             android:textColor="#1A1A1A"
+-            android:textSize="14sp" />
++            android:textSize="14sp"
++            android:maxLines="1"
++            android:ellipsize="end" />
+ 
+         <TextView
+             android:id="@+id/btnCopy"
+@@ -95,10 +98,40 @@
+             android:paddingHorizontal="20dp"
+             android:text="Copy"
+             android:textColor="#2962FF"
++            android:textStyle="bold"
++            android:clickable="true"
++            android:focusable="true" />
++    </LinearLayout>
++
++    <LinearLayout
++        android:id="@+id/btnShareWhatsapp"
++        android:layout_width="match_parent"
++        android:layout_height="56dp"
++        android:layout_marginTop="16dp"
++        android:orientation="horizontal"
++        android:gravity="center"
++        android:background="@drawable/search_bg"
++        android:clickable="true"
++        android:focusable="true"
++        app:layout_constraintTop_toBottomOf="@id/linkBox">
++
++        <ImageView
++            android:layout_width="24dp"
++            android:layout_height="24dp"
++            android:src="@drawable/whatsapp"
++            android:scaleType="fitCenter"
++            android:contentDescription="WhatsApp Icon" />
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginStart="12dp"
++            android:text="Share via WhatsApp"
++            android:textColor="#1A1A1A"
++            android:textSize="16sp"
+             android:textStyle="bold" />
+     </LinearLayout>
+ 
+-    <!-- Go to Timeline Button -->
+     <androidx.appcompat.widget.AppCompatButton
+         android:id="@+id/btnTimeline"
+         android:layout_width="match_parent"
+@@ -109,7 +142,7 @@
+         android:textColor="#FFFFFF"
+         android:textSize="18sp"
+         android:textStyle="bold"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        android:layout_marginBottom="40dp" />
++        android:layout_marginBottom="40dp"
++        app:layout_constraintBottom_toBottomOf="parent" />
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
