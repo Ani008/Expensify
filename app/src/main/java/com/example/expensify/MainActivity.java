@@ -1,11 +1,13 @@
 package com.example.expensify;
 
-import android.content.Intent; // Added for deep links
-import android.net.Uri; // Added for deep links
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast; // Added for deep links
+import android.widget.Toast;
 
+import androidx.annotation.NonNull; // Added for Wear OS
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -13,9 +15,19 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity {
+// WEAR OS START: Import Wearable APIs
+import com.google.android.gms.wearable.MessageClient;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
+import java.nio.charset.StandardCharsets;
+// WEAR OS END
+
+// WEAR OS START: Implement OnMessageReceivedListener
+public class MainActivity extends AppCompatActivity implements MessageClient.OnMessageReceivedListener {
+// WEAR OS END
 
     private FloatingActionButton fabAdd;
+    private static final String TAG = "MainActivity_Wear"; // For debugging
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         // 2. Handle the "+" button click
         fabAdd.setOnClickListener(v -> {
-            // When we go to Create Group, hide the FAB
             fabAdd.setVisibility(View.GONE);
 
             getSupportFragmentManager().beginTransaction()
@@ -54,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 fabAdd.setVisibility(View.VISIBLE);
 
             } else if (id == R.id.nav_settings) {
-                selectedFragment = new Payment();  // 👈 OPEN PAYMENT FRAGMENT
+                selectedFragment = new Payment();
                 fabAdd.setVisibility(View.GONE);
 
             } else {
@@ -84,9 +95,55 @@ public class MainActivity extends AppCompatActivity {
         handleDeepLink(getIntent());
     }
 
-    // --- NEW METHODS FOR DEEP LINKING ADDED BELOW ---
+    // WEAR OS START: Register and unregister the listener based on Activity lifecycle
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Start listening for watch messages when the app is on screen
+        Wearable.getMessageClient(this).addListener(this);
+    }
 
-    // Catches the link if the app is already open in the background
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Stop listening to save battery when the app is in the background
+        Wearable.getMessageClient(this).removeListener(this);
+    }
+
+    // Catch the message sent directly from the watch
+    @Override
+    public void onMessageReceived(@NonNull MessageEvent messageEvent) {
+        if (messageEvent.getPath().equals("/add_group_expense")) {
+            String payload = new String(messageEvent.getData(), StandardCharsets.UTF_8);
+            String[] parts = payload.split(":");
+
+            if (parts.length == 2) {
+                try {
+                    int amount = Integer.parseInt(parts[0]);
+                    String member = parts[1];
+
+                    Log.d(TAG, "Live expense received from watch: ₹" + amount + " for " + member);
+
+                    // UI updates must happen on the main thread
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this,
+                                "Watch Sync: Added ₹" + amount + " for " + member,
+                                Toast.LENGTH_LONG).show();
+
+                        // TODO: If you want to refresh your current fragment to show the new data,
+                        // trigger that refresh here.
+                    });
+
+                } catch (NumberFormatException e) {
+                    Log.e(TAG, "Failed to parse amount from watch", e);
+                }
+            }
+        }
+    }
+    // WEAR OS END
+
+    // --- DEEP LINKING METHODS ---
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -94,36 +151,28 @@ public class MainActivity extends AppCompatActivity {
         handleDeepLink(intent);
     }
 
-    // Extracts the 6-character code from the URL
-    // Extracts the 6-character code from the URL and navigates
     private void handleDeepLink(Intent intent) {
         String action = intent.getAction();
         Uri data = intent.getData();
 
-        // Check if the intent is a VIEW action and contains a URL
         if (Intent.ACTION_VIEW.equals(action) && data != null) {
-
-            // Example data: https://expenseshare.app/join/X7B9Q2
             String groupCode = data.getLastPathSegment();
 
             if (groupCode != null && !groupCode.isEmpty()) {
                 Toast.makeText(this, "Joining group: " + groupCode, Toast.LENGTH_SHORT).show();
 
-                // 1. Hide the FAB since we are leaving the Home screen
                 if (fabAdd != null) {
                     fabAdd.setVisibility(View.GONE);
                 }
 
-                // 2. Create the fragment and pack the groupCode into a Bundle
-                Fragment groupDetailsFragment = new TimelineFragment(); // Replace with your actual fragment class
+                Fragment groupDetailsFragment = new TimelineFragment();
                 Bundle args = new Bundle();
                 args.putString("GROUP_CODE", groupCode);
                 groupDetailsFragment.setArguments(args);
 
-                // 3. Perform the Fragment Transaction
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, groupDetailsFragment)
-                        .addToBackStack(null) // Allows the user to press 'Back' to return to Home
+                        .addToBackStack(null)
                         .commit();
             }
         }
