@@ -22,14 +22,23 @@ public class upiAdapter extends RecyclerView.Adapter<upiAdapter.ViewHolder> {
     Context context;
     ArrayList<String> usernames;
     ArrayList<String> upiIds;
+    PayClickListener listener;
 
+    // ✅ Interface to send click back to Fragment
+    public interface PayClickListener {
+        void onPayClick(String upiId, String username);
+    }
+
+    // ✅ Constructor
     public upiAdapter(Context context,
                       ArrayList<String> usernames,
-                      ArrayList<String> upiIds) {
+                      ArrayList<String> upiIds,
+                      PayClickListener listener) {
 
         this.context = context;
         this.usernames = usernames;
         this.upiIds = upiIds;
+        this.listener = listener;
     }
 
     @NonNull
@@ -54,8 +63,12 @@ public class upiAdapter extends RecyclerView.Adapter<upiAdapter.ViewHolder> {
 
         holder.upiText.setText(username + "\n" + upiId);
 
-        holder.payBtn.setOnClickListener(v ->
-                payUsingUpi(upiId, username));
+        // ✅ SINGLE CLICK LISTENER
+        holder.payBtn.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onPayClick(upiId, username);
+            }
+        });
     }
 
     @Override
@@ -63,6 +76,7 @@ public class upiAdapter extends RecyclerView.Adapter<upiAdapter.ViewHolder> {
         return upiIds.size();
     }
 
+    // ✅ ViewHolder
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView upiText;
@@ -74,23 +88,5 @@ public class upiAdapter extends RecyclerView.Adapter<upiAdapter.ViewHolder> {
             upiText = itemView.findViewById(R.id.upiIdText);
             payBtn = itemView.findViewById(R.id.payButton);
         }
-    }
-
-    private void payUsingUpi(String upiId, String name) {
-
-        Uri uri = Uri.parse("upi://pay").buildUpon()
-                .appendQueryParameter("pa", upiId)
-                .appendQueryParameter("pn", name)
-                .appendQueryParameter("tn", "Expense Payment")
-                .appendQueryParameter("am", "1")
-                .appendQueryParameter("cu", "INR")
-                .build();
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(uri);
-
-        context.startActivity(
-                Intent.createChooser(intent, "Pay using")
-        );
     }
 }
