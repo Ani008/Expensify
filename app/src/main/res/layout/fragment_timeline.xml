@@ -8,7 +8,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -16,11 +17,12 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Header -->
+            <!-- Header Section -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/tvGroupTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Japan Trip 2024"
@@ -87,37 +89,85 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Timeline List -->
-            <LinearLayout
+            <!-- Activity Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Activity History"
+                android:textColor="#1A1A1A"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Timeline List Items - Each in its own professional card -->
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
+                    <include layout="@layout/item_timeline_expense" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                <!-- We include the expense rows here -->
-                <include layout="@layout/item_timeline_expense" />
-                <include layout="@layout/item_timeline_expense" />
-                <include layout="@layout/item_timeline_expense" />
-                <include layout="@layout/item_timeline_expense" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
+                    <include layout="@layout/item_timeline_expense" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="24dp"
-                    android:text="Load previous expenses"
-                    android:textColor="#CCCCCC"
-                    android:textSize="14sp" />
-            </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
+                    <include layout="@layout/item_timeline_expense" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-            <!-- Spacer so content doesn't get covered by button -->
-            <View android:layout_width="match_parent" android:layout_height="100dp" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
+                    <include layout="@layout/item_timeline_expense" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="24dp"
+                android:text="Load previous expenses"
+                android:textColor="#CCCCCC"
+                android:textSize="14sp" />
+
+            <!-- Bottom Spacer -->
+            <View android:layout_width="match_parent" android:layout_height="120dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <!-- Floating Add Expense Button -->
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnAddExpense"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
         android:layout_gravity="bottom|center_horizontal"

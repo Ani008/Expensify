@@ -2,6 +2,7 @@ package com.example.expensify;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +21,37 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         view.setBackgroundColor(Color.WHITE);
 
-        // --- SETUP CARD 1 (Europe Trip - RED) ---
+        // 1. Ensure the Bottom Navigation Bar and FAB are VISIBLE and margin is restored
+        if (getActivity() != null) {
+            View navBar = getActivity().findViewById(R.id.bottom_navigation);
+            View fab = getActivity().findViewById(R.id.fab_add);
+            View fragmentContainer = getActivity().findViewById(R.id.fragment_container);
+
+            if (navBar != null) navBar.setVisibility(View.VISIBLE);
+            if (fab != null) fab.setVisibility(View.VISIBLE);
+
+            if (fragmentContainer != null && fragmentContainer.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fragmentContainer.getLayoutParams();
+                int marginInPx = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
+                params.bottomMargin = marginInPx;
+                fragmentContainer.requestLayout();
+            }
+        }
+
+        // --- SETUP CARDS ---
+        setupCards(view);
+
+        return view;
+    }
+
+    private void setupCards(View view) {
+        // Setup Europe Trip
         View cardEurope = view.findViewById(R.id.cardEurope);
         ((TextView) cardEurope.findViewById(R.id.tvTitle)).setText("Europe Trip 2024");
         ((TextView) cardEurope.findViewById(R.id.tvStatus)).setText("YOU OWE ₹450");
-        // Background is red by default from our previous item layout
 
-        // --- SETUP CARD 2 (Flatmates - GREEN) ---
+        // Setup Flatmates
         View cardFlatmates = view.findViewById(R.id.cardFlatmates);
         TextView tvStatusFlat = cardFlatmates.findViewById(R.id.tvStatus);
         ((TextView) cardFlatmates.findViewById(R.id.tvTitle)).setText("Flatmates");
@@ -34,12 +59,11 @@ public class HomeFragment extends Fragment {
         ((TextView) cardFlatmates.findViewById(R.id.tvLabel)).setText("SETTLEMENT");
         ((TextView) cardFlatmates.findViewById(R.id.tvPercent)).setText("100%");
         ((ProgressBar) cardFlatmates.findViewById(R.id.progressBar)).setProgress(100);
-
         tvStatusFlat.setText("ALL SETTLED");
-        tvStatusFlat.setTextColor(Color.parseColor("#2E7D32")); // Dark Green text
+        tvStatusFlat.setTextColor(Color.parseColor("#2E7D32"));
         tvStatusFlat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.status_tag_bg_green));
 
-        // --- SETUP CARD 3 (Office Lunch - BLUE) ---
+        // Setup Office Lunch
         View cardOffice = view.findViewById(R.id.cardOffice);
         TextView tvStatusOffice = cardOffice.findViewById(R.id.tvStatus);
         ((TextView) cardOffice.findViewById(R.id.tvTitle)).setText("Office Lunch");
@@ -47,11 +71,8 @@ public class HomeFragment extends Fragment {
         ((TextView) cardOffice.findViewById(R.id.tvLabel)).setText("COLLECTION");
         ((TextView) cardOffice.findViewById(R.id.tvPercent)).setText("75%");
         ((ProgressBar) cardOffice.findViewById(R.id.progressBar)).setProgress(75);
-
         tvStatusOffice.setText("YOU ARE OWED ₹1,200");
-        tvStatusOffice.setTextColor(Color.parseColor("#1565C0")); // Dark Blue text
+        tvStatusOffice.setTextColor(Color.parseColor("#1565C0"));
         tvStatusOffice.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.status_tag_bg_blue));
-
-        return view;
     }
 }
