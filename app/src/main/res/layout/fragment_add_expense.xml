@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="24dp">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textColor="#666666"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Expense"
+        android:textColor="#1A1A1A"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/btnHeaderAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:textColor="#1A1A1A"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Amount Input Section -->
+    <TextView
+        android:id="@+id/lblAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AMOUNT"
+        android:textColor="#CCCCCC"
+        android:textSize="12sp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@id/btnCancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/amountContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/lblAmount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:textColor="#CCCCCC"
+            android:textSize="48sp" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="0.00"
+            android:textColor="#1A1A1A"
+            android:textColorHint="#E0E0E0"
+            android:textSize="72sp"
+            android:background="@android:color/transparent"
+            android:inputType="numberDecimal"
+            android:importantForAutofill="no" />
+    </LinearLayout>
+
+    <!-- Inputs -->
+    <EditText
+        android:id="@+id/etWhatFor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="What was it for?"
+        android:textSize="20sp"
+        android:background="@android:color/transparent"
+        android:paddingVertical="16dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toBottomOf="@id/amountContainer" />
+
+    <View android:id="@+id/line1" android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" app:layout_constraintTop_toBottomOf="@id/etWhatFor"/>
+
+    <EditText
+        android:id="@+id/etNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Add description or notes (optional)"
+        android:textSize="16sp"
+        android:background="@android:color/transparent"
+        android:paddingVertical="16dp"
+        app:layout_constraintTop_toBottomOf="@id/line1" />
+
+    <View android:id="@+id/line2" android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" app:layout_constraintTop_toBottomOf="@id/etNotes"/>
+
+    <!-- Selection Rows -->
+    <LinearLayout
+        android:id="@+id/selectionContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/line2">
+
+        <!-- Paid By -->
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="72dp">
+            <ImageView android:id="@+id/imgPaid" android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_manage" android:background="@drawable/search_bg" android:padding="8dp" android:layout_centerVertical="true" app:tint="#666666"/>
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/imgPaid" android:layout_marginStart="16dp" android:layout_centerVertical="true">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PAID BY" android:textSize="10sp" android:textColor="#999999"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="You" android:textSize="16sp" android:textColor="#1A1A1A"/>
+            </LinearLayout>
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_media_play" android:layout_alignParentEnd="true" android:layout_centerVertical="true" app:tint="#CCCCCC"/>
+        </RelativeLayout>
+
+        <!-- Split Between -->
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="72dp">
+            <ImageView android:id="@+id/imgSplit" android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_share" android:background="@drawable/search_bg" android:padding="8dp" android:layout_centerVertical="true" app:tint="#666666"/>
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/imgSplit" android:layout_marginStart="16dp" android:layout_centerVertical="true">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SPLIT BETWEEN" android:textSize="10sp" android:textColor="#999999"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Everyone (4 people)" android:textSize="16sp" android:textColor="#1A1A1A"/>
+            </LinearLayout>
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_media_play" android:layout_alignParentEnd="true" android:layout_centerVertical="true" app:tint="#CCCCCC"/>
+        </RelativeLayout>
+
+        <!-- Category -->
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="72dp">
+            <ImageView android:id="@+id/imgCategory" android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_agenda" android:background="@drawable/search_bg" android:padding="8dp" android:layout_centerVertical="true" app:tint="#666666"/>
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/imgCategory" android:layout_marginStart="16dp" android:layout_centerVertical="true">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CATEGORY" android:textSize="10sp" android:textColor="#999999"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Not specified" android:textSize="16sp" android:textColor="#999999"/>
+            </LinearLayout>
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_media_play" android:layout_alignParentEnd="true" android:layout_centerVertical="true" app:tint="#CCCCCC"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- Chips (Today / Receipt) -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/selectionContainer"
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_bg"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="📅 Today"
+            android:textColor="#1A1A1A" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/search_bg"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="📎 Receipt"
+            android:textColor="#1A1A1A" />
+    </LinearLayout>
+
+    <!-- Bottom Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnAddExpense"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/black_button_bg"
+        android:text="Add to Timeline →"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
