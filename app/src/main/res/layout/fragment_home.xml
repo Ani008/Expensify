@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,10 +36,22 @@
             android:hint="Search workspaces..."
             android:padding="12dp"
             android:drawableStart="@drawable/search"
-            android:drawableTint="@color/black"
             android:drawablePadding="10dp"
             android:inputType="text"
             android:importantForAutofill="no" />
+
+        <TextView
+            android:id="@+id/tvOpenTemplates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:text="Browse Templates >"
+            android:textColor="#1A1A1A"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingVertical="4dp"
+            android:paddingStart="8dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewGroups"
@@ -50,10 +63,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:background="@drawable/dashed_placeholder_bg"
             android:gravity="center"
             android:padding="32dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

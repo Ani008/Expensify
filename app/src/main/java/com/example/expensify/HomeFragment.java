@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,7 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
+    // Missing declarations added here
     private RecyclerView recyclerView;
     private GroupAdapter adapter;
     private List<Group> groupList;
@@ -35,12 +38,29 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        view.setBackgroundColor(Color.WHITE);
 
         // 1. Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerViewGroups);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         groupList = new ArrayList<>();
+        // Initialize adapter early to avoid null pointer issues
+        adapter = new GroupAdapter(groupList);
+        recyclerView.setAdapter(adapter);
+
+        // --- Setup "Browse Templates >" Click Listener ---
+        TextView tvOpenTemplates = view.findViewById(R.id.tvOpenTemplates);
+        if (tvOpenTemplates != null) {
+            tvOpenTemplates.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new template())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+
+
 
         // 2. Fetch Data from Firebase
         fetchGroupsFromFirebase();
@@ -49,35 +69,39 @@ public class HomeFragment extends Fragment {
     }
 
     private void fetchGroupsFromFirebase() {
-        // Get the phone number we saved in SignUpActivity
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
+        // Ensure this matches the key used in your SignUpActivity
         String myPhone = sharedPreferences.getString("loggedInPhone", "");
 
-        if (myPhone.isEmpty()) return;
+        if (myPhone.isEmpty()) {
+            Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // Querying the "groups" node where "creatorId" matches my phone number
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups");
-
-        // Filter: Only fetch groups where creatorId == my logged-in phone number
         Query query = ref.orderByChild("creatorId").equalTo(myPhone);
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 groupList.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Group group = ds.getValue(Group.class);
-                    if (group != null) {
-                        groupList.add(group);
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        Group group = ds.getValue(Group.class);
+                        if (group != null) {
+                            groupList.add(group);
+                        }
                     }
                 }
-                // 3. Set/Update Adapter
-                adapter = new GroupAdapter(groupList);
-                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                if (isAdded()) { // Check if fragment is still attached
+                    Toast.makeText(getContext(), "Database Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
