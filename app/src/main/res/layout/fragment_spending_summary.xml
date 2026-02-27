@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="32dp"
+            android:layoutAnimation="@anim/layout_anim_staggered">
+
+            <TextView
+                android:id="@+id/tvHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spending Summary"
+                android:textColor="#111111"
+                android:textSize="28sp"
+                android:fontFamily="sans-serif-medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTotalLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="TOTAL EXPENDITURE"
+                android:textColor="#9CA3AF"
+                android:textSize="12sp"
+                android:letterSpacing="0.05"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvHeader" />
+
+            <TextView
+                android:id="@+id/tvTotalAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹2,450.00"
+                android:textColor="#111111"
+                android:textSize="36sp"
+                android:fontFamily="sans-serif-black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTotalLabel" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="+4.2%"
+                android:textColor="#10B981"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium"
+                app:layout_constraintBottom_toBottomOf="@+id/tvTotalAmount"
+                app:layout_constraintStart_toEndOf="@+id/tvTotalAmount" />
+
+            <TextView
+                android:id="@+id/tvTrendsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="MONTHLY TRENDS"
+                android:textColor="#9CA3AF"
+                android:textSize="12sp"
+                android:letterSpacing="0.05"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTotalAmount" />
+
+            <LinearLayout
+                android:id="@+id/chartContainer"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                app:layout_constraintTop_toBottomOf="@+id/tvTrendsLabel">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="vertical">
+                    <View android:layout_width="2dp" android:layout_height="100dp" android:background="#D1D5DB" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="APR" android:textColor="#9CA3AF" android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="vertical">
+                    <View android:layout_width="2dp" android:layout_height="110dp" android:background="#111111" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="MAY" android:textColor="#111111" android:textSize="10sp" android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="vertical">
+                    <View android:layout_width="2dp" android:layout_height="35dp" android:background="#D1D5DB" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="JUN" android:textColor="#9CA3AF" android:textSize="10sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/dividerChart"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="#F3F4F6"
+                app:layout_constraintTop_toBottomOf="@+id/chartContainer" />
+
+            <TextView
+                android:id="@+id/tvCategoriesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="CATEGORIES"
+                android:textColor="#9CA3AF"
+                android:textSize="12sp"
+                android:letterSpacing="0.05"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dividerChart" />
+
+            <LinearLayout
+                android:id="@+id/llCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true"
+                app:layout_constraintTop_toBottomOf="@+id/tvCategoriesLabel">
+
+                <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="24dp">
+                    <FrameLayout android:id="@+id/iconFood" android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_rounded_gray" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_myplaces" app:tint="#111111" />
+                    </FrameLayout>
+                    <TextView android:id="@+id/tvFoodTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Food &amp; Dining" android:textColor="#111111" android:textSize="16sp" app:layout_constraintStart_toEndOf="@+id/iconFood" app:layout_constraintTop_toTopOf="@+id/iconFood" app:layout_constraintBottom_toTopOf="@+id/tvFoodSub" />
+                    <TextView android:id="@+id/tvFoodSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="24 transactions" android:textColor="#9CA3AF" android:textSize="14sp" app:layout_constraintStart_toEndOf="@+id/iconFood" app:layout_constraintTop_toBottomOf="@+id/tvFoodTitle" app:layout_constraintBottom_toBottomOf="@+id/iconFood" />
+                    <TextView android:id="@+id/tvFoodAmt" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹1,200.00" android:textColor="#111111" android:textSize="16sp" android:fontFamily="sans-serif-medium" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@+id/tvFoodTitle" />
+                    <TextView android:id="@+id/tvFoodPct" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="48%" android:textColor="#9CA3AF" android:textSize="10sp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="@+id/tvFoodSub" />
+                    <LinearLayout android:layout_width="60dp" android:layout_height="3dp" android:layout_marginEnd="8dp" android:orientation="horizontal" android:weightSum="1" app:layout_constraintEnd_toStartOf="@+id/tvFoodPct" app:layout_constraintTop_toTopOf="@+id/tvFoodPct" app:layout_constraintBottom_toBottomOf="@+id/tvFoodPct">
+                        <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.48" android:background="#111111" />
+                        <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.52" android:background="#F3F4F6" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp">
+                    <FrameLayout android:id="@+id/iconShopping" android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_rounded_gray" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_gallery" app:tint="#111111" />
+                    </FrameLayout>
+                    <TextView android:id="@+id/tvShoppingTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Shopping" android:textColor="#111111" android:textSize="16sp" app:layout_constraintStart_toEndOf="@+id/iconShopping" app:layout_constraintTop_toTopOf="@+id/iconShopping" app:layout_constraintBottom_toTopOf="@+id/tvShoppingSub" />
+                    <TextView android:id="@+id/tvShoppingSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="12 transactions" android:textColor="#9CA3AF" android:textSize="14sp" app:layout_constraintStart_toEndOf="@+id/iconShopping" app:layout_constraintTop_toBottomOf="@+id/tvShoppingTitle" app:layout_constraintBottom_toBottomOf="@+id/iconShopping" />
+                    <TextView android:id="@+id/tvShoppingAmt" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹650.00" android:textColor="#111111" android:textSize="16sp" android:fontFamily="sans-serif-medium" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@+id/tvShoppingTitle" />
+                    <TextView android:id="@+id/tvShoppingPct" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="26%" android:textColor="#9CA3AF" android:textSize="10sp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="@+id/tvShoppingSub" />
+                    <LinearLayout android:layout_width="60dp" android:layout_height="3dp" android:layout_marginEnd="8dp" android:orientation="horizontal" android:weightSum="1" app:layout_constraintEnd_toStartOf="@+id/tvShoppingPct" app:layout_constraintTop_toTopOf="@+id/tvShoppingPct" app:layout_constraintBottom_toBottomOf="@+id/tvShoppingPct">
+                        <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.26" android:background="#111111" />
+                        <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.74" android:background="#F3F4F6" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:cardBackgroundColor="#F7F8FA"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#F3F4F6"
+                app:layout_constraintTop_toBottomOf="@+id/llCategories"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:id="@+id/ivBulb"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@android:drawable/ic_dialog_info"
+                        app:tint="#9CA3AF"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="GROUP INSIGHT"
+                        android:textColor="#9CA3AF"
+                        android:textSize="12sp"
+                        android:letterSpacing="0.05"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivBulb"
+                        app:layout_constraintStart_toEndOf="@+id/ivBulb"
+                        app:layout_constraintTop_toTopOf="@+id/ivBulb" />
+
+                    <TextView
+                        android:id="@+id/tvInsightDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="6dp"
+                        android:text="Jordan contributed the most this month\n(₹1,420), primarily towards shared travel\nexpenses."
+                        android:textColor="#111111"
+                        android:textSize="14sp"
+                        app:layout_constraintTop_toBottomOf="@+id/ivBulb" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvInsightDesc"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="@drawable/bg_circle_gray"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:padding="4dp"/>
+
+                        <TextView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_marginStart="-10dp"
+                            android:background="@drawable/bg_circle_gray"
+                            android:gravity="center"
+                            android:text="+3"
+                            android:textColor="#111111"
+                            android:textSize="10sp"
+                            android:fontFamily="sans-serif-medium" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,188 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:2:1-29:12
+INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:2:1-29:12
+INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:2:1-29:12
+INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:2:1-29:12
+MERGED from [androidx.wear:wear:1.3.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\8cee57edb4a285e7a6ff71c0f5be9cdb\workspace\transformed\wear-1.3.0\AndroidManifest.xml:17:1-28:12
+MERGED from [androidx.core:core-ktx:1.6.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3fcad21a02bc609c3de18f1f80645204\workspace\transformed\core-ktx-1.6.0\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-wearable:19.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\c692562f63e93174a068be848f943172\workspace\transformed\play-services-wearable-19.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3019a40e1e44b0a86d2828ecc22f8075\workspace\transformed\play-services-base-18.5.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\70d29519705f210f364447430fd5d317\workspace\transformed\play-services-tasks-18.2.0\AndroidManifest.xml:2:1-5:12
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\1ee57709e7337c7f8783cfe515017f5f\workspace\transformed\play-services-basement-18.4.0\AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\e2424c5dd4c6c2d1dc83e8d7c7c1b6ca\workspace\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.fragment:fragment:1.2.4] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\a9e5e48a8431ed03b90e472a2eccf3b7\workspace\transformed\fragment-1.2.4\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\7183dd0e1302167dc3525c175ef5d62d\workspace\transformed\recyclerview-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\789e8c8e3b6756554eab5646ec2015e5\workspace\transformed\swiperefreshlayout-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\f9fbe01576b24a49cc09d8ce0db5c80a\workspace\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\4ccc4b751510b779cf9c0a8025dbad53\workspace\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\a3e6eea7e7c67b44b429f91ab918d444\workspace\transformed\loader-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity:1.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\5ef67adf6cdc7654b051fc0bebe1ebe5\workspace\transformed\activity-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\219bf4b415dc3a554d38b46fe52b161b\workspace\transformed\customview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.6.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\dbd0d511627fc68f519267bbafd5c27f\workspace\transformed\core-1.6.0\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\046ae40e8c3fd610e37ef47f3653d637\workspace\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\fc35c0f8b9ffa52238d2395b423458da\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\4204c2616f0ff89e3b32df64db45d1e8\workspace\transformed\lifecycle-viewmodel-savedstate-2.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\5a33b82e8bade7977e4fec43779972de\workspace\transformed\lifecycle-viewmodel-2.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\cd90132696a79f32adb1152cfce54e8e\workspace\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\5c41ea28b004f683630852e1ef7a0cd8\workspace\transformed\lifecycle-livedata-core-2.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\66ead8bc88245f3857eea3463bdc3861\workspace\transformed\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\9cf2b0e1ed06a7a994c2db82a43447ad\workspace\transformed\savedstate-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\33db8c94170db06ba59e84718b11d47e\workspace\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\825821861c5fd251ee329c8552406a6f\workspace\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\a7f8ede7bae84230bf8b7a80ec2623eb\workspace\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\eb237f95079a5a976db99a8dafe246d6\workspace\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\eb0b28611881391c94cac1ff028d3338\workspace\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
+	package
+		INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:2:11-69
+uses-feature#android.hardware.type.watch
+ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:4:5-64
+	android:name
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:4:19-61
+application
+ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:6:5-27:19
+INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:6:5-27:19
+MERGED from [androidx.wear:wear:1.3.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\8cee57edb4a285e7a6ff71c0f5be9cdb\workspace\transformed\wear-1.3.0\AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.wear:wear:1.3.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\8cee57edb4a285e7a6ff71c0f5be9cdb\workspace\transformed\wear-1.3.0\AndroidManifest.xml:22:5-26:19
+MERGED from [com.google.android.gms:play-services-wearable:19.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\c692562f63e93174a068be848f943172\workspace\transformed\play-services-wearable-19.0.0\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-wearable:19.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\c692562f63e93174a068be848f943172\workspace\transformed\play-services-wearable-19.0.0\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3019a40e1e44b0a86d2828ecc22f8075\workspace\transformed\play-services-base-18.5.0\AndroidManifest.xml:4:5-6:19
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3019a40e1e44b0a86d2828ecc22f8075\workspace\transformed\play-services-base-18.5.0\AndroidManifest.xml:4:5-6:19
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\70d29519705f210f364447430fd5d317\workspace\transformed\play-services-tasks-18.2.0\AndroidManifest.xml:4:5-20
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\70d29519705f210f364447430fd5d317\workspace\transformed\play-services-tasks-18.2.0\AndroidManifest.xml:4:5-20
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\1ee57709e7337c7f8783cfe515017f5f\workspace\transformed\play-services-basement-18.4.0\AndroidManifest.xml:5:5-7:19
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\1ee57709e7337c7f8783cfe515017f5f\workspace\transformed\play-services-basement-18.4.0\AndroidManifest.xml:5:5-7:19
+MERGED from [androidx.core:core:1.6.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\dbd0d511627fc68f519267bbafd5c27f\workspace\transformed\core-1.6.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.6.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\dbd0d511627fc68f519267bbafd5c27f\workspace\transformed\core-1.6.0\AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\fc35c0f8b9ffa52238d2395b423458da\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\fc35c0f8b9ffa52238d2395b423458da\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+	android:extractNativeLibs
+		INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.6.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\dbd0d511627fc68f519267bbafd5c27f\workspace\transformed\core-1.6.0\AndroidManifest.xml:24:18-86
+	android:supportsRtl
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:10:9-35
+	android:label
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:9:9-41
+	android:icon
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:8:9-43
+	android:allowBackup
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:7:9-35
+	android:theme
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:11:9-59
+meta-data#com.google.android.wearable.standalone
+ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:13:9-15:37
+	android:value
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:15:13-34
+	android:name
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:14:13-66
+activity#com.example.expensify.MainActivity
+ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:17:9-25:20
+	android:exported
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:19:13-36
+	android:taskAffinity
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:20:13-36
+	android:name
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:18:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:21:13-24:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:22:17-69
+	android:name
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:22:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:23:17-77
+	android:name
+		ADDED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml:23:27-74
+uses-sdk
+INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml
+MERGED from [androidx.wear:wear:1.3.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\8cee57edb4a285e7a6ff71c0f5be9cdb\workspace\transformed\wear-1.3.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.wear:wear:1.3.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\8cee57edb4a285e7a6ff71c0f5be9cdb\workspace\transformed\wear-1.3.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.6.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3fcad21a02bc609c3de18f1f80645204\workspace\transformed\core-ktx-1.6.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.6.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3fcad21a02bc609c3de18f1f80645204\workspace\transformed\core-ktx-1.6.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.google.android.gms:play-services-wearable:19.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\c692562f63e93174a068be848f943172\workspace\transformed\play-services-wearable-19.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wearable:19.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\c692562f63e93174a068be848f943172\workspace\transformed\play-services-wearable-19.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3019a40e1e44b0a86d2828ecc22f8075\workspace\transformed\play-services-base-18.5.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3019a40e1e44b0a86d2828ecc22f8075\workspace\transformed\play-services-base-18.5.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\70d29519705f210f364447430fd5d317\workspace\transformed\play-services-tasks-18.2.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\70d29519705f210f364447430fd5d317\workspace\transformed\play-services-tasks-18.2.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\1ee57709e7337c7f8783cfe515017f5f\workspace\transformed\play-services-basement-18.4.0\AndroidManifest.xml:3:5-44
+MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\1ee57709e7337c7f8783cfe515017f5f\workspace\transformed\play-services-basement-18.4.0\AndroidManifest.xml:3:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\e2424c5dd4c6c2d1dc83e8d7c7c1b6ca\workspace\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\e2424c5dd4c6c2d1dc83e8d7c7c1b6ca\workspace\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.2.4] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\a9e5e48a8431ed03b90e472a2eccf3b7\workspace\transformed\fragment-1.2.4\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.2.4] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\a9e5e48a8431ed03b90e472a2eccf3b7\workspace\transformed\fragment-1.2.4\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\7183dd0e1302167dc3525c175ef5d62d\workspace\transformed\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\7183dd0e1302167dc3525c175ef5d62d\workspace\transformed\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\789e8c8e3b6756554eab5646ec2015e5\workspace\transformed\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\789e8c8e3b6756554eab5646ec2015e5\workspace\transformed\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\f9fbe01576b24a49cc09d8ce0db5c80a\workspace\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\f9fbe01576b24a49cc09d8ce0db5c80a\workspace\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\4ccc4b751510b779cf9c0a8025dbad53\workspace\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\4ccc4b751510b779cf9c0a8025dbad53\workspace\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\a3e6eea7e7c67b44b429f91ab918d444\workspace\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\a3e6eea7e7c67b44b429f91ab918d444\workspace\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\5ef67adf6cdc7654b051fc0bebe1ebe5\workspace\transformed\activity-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\5ef67adf6cdc7654b051fc0bebe1ebe5\workspace\transformed\activity-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\219bf4b415dc3a554d38b46fe52b161b\workspace\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\219bf4b415dc3a554d38b46fe52b161b\workspace\transformed\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.6.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\dbd0d511627fc68f519267bbafd5c27f\workspace\transformed\core-1.6.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.6.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\dbd0d511627fc68f519267bbafd5c27f\workspace\transformed\core-1.6.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\046ae40e8c3fd610e37ef47f3653d637\workspace\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\046ae40e8c3fd610e37ef47f3653d637\workspace\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\fc35c0f8b9ffa52238d2395b423458da\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\fc35c0f8b9ffa52238d2395b423458da\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\4204c2616f0ff89e3b32df64db45d1e8\workspace\transformed\lifecycle-viewmodel-savedstate-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\4204c2616f0ff89e3b32df64db45d1e8\workspace\transformed\lifecycle-viewmodel-savedstate-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\5a33b82e8bade7977e4fec43779972de\workspace\transformed\lifecycle-viewmodel-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\5a33b82e8bade7977e4fec43779972de\workspace\transformed\lifecycle-viewmodel-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\cd90132696a79f32adb1152cfce54e8e\workspace\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\cd90132696a79f32adb1152cfce54e8e\workspace\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\5c41ea28b004f683630852e1ef7a0cd8\workspace\transformed\lifecycle-livedata-core-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.2.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\5c41ea28b004f683630852e1ef7a0cd8\workspace\transformed\lifecycle-livedata-core-2.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\66ead8bc88245f3857eea3463bdc3861\workspace\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\66ead8bc88245f3857eea3463bdc3861\workspace\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\9cf2b0e1ed06a7a994c2db82a43447ad\workspace\transformed\savedstate-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\9cf2b0e1ed06a7a994c2db82a43447ad\workspace\transformed\savedstate-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\33db8c94170db06ba59e84718b11d47e\workspace\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\33db8c94170db06ba59e84718b11d47e\workspace\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\825821861c5fd251ee329c8552406a6f\workspace\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\825821861c5fd251ee329c8552406a6f\workspace\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\a7f8ede7bae84230bf8b7a80ec2623eb\workspace\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\a7f8ede7bae84230bf8b7a80ec2623eb\workspace\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\eb237f95079a5a976db99a8dafe246d6\workspace\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\eb237f95079a5a976db99a8dafe246d6\workspace\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\eb0b28611881391c94cac1ff028d3338\workspace\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\eb0b28611881391c94cac1ff028d3338\workspace\transformed\annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
+	android:targetSdkVersion
+		INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\Mayank\Desktop\Expensify\wear\src\main\AndroidManifest.xml
+uses-library#com.google.android.wearable
+ADDED from [androidx.wear:wear:1.3.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\8cee57edb4a285e7a6ff71c0f5be9cdb\workspace\transformed\wear-1.3.0\AndroidManifest.xml:23:9-25:40
+	android:required
+		ADDED from [androidx.wear:wear:1.3.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\8cee57edb4a285e7a6ff71c0f5be9cdb\workspace\transformed\wear-1.3.0\AndroidManifest.xml:25:13-37
+	android:name
+		ADDED from [androidx.wear:wear:1.3.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\8cee57edb4a285e7a6ff71c0f5be9cdb\workspace\transformed\wear-1.3.0\AndroidManifest.xml:24:13-55
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3019a40e1e44b0a86d2828ecc22f8075\workspace\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:9-173
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3019a40e1e44b0a86d2828ecc22f8075\workspace\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:146-170
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3019a40e1e44b0a86d2828ecc22f8075\workspace\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:86-145
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:18.5.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\3019a40e1e44b0a86d2828ecc22f8075\workspace\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:19-85
+meta-data#com.google.android.gms.version
+ADDED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\1ee57709e7337c7f8783cfe515017f5f\workspace\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
+	android:value
+		ADDED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\1ee57709e7337c7f8783cfe515017f5f\workspace\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
+	android:name
+		ADDED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\Mayank\.gradle\caches\9.1.0\transforms\1ee57709e7337c7f8783cfe515017f5f\workspace\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:20-65

@@ -1,0 +1,94 @@
+[
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\layout_spinner_item.xml.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\layout\\spinner_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.expensify.wear-debug-12:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.expensify.wear-main-14:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-anydpi\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\layout_activity_add_expense.xml.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\layout\\activity_add_expense.xml"
+    },
+    {
+        "merged": "com.example.expensify.wear-debug-12:/layout_activity_main.xml.flat",
+        "source": "com.example.expensify.wear-main-14:/layout/activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.expensify.wear-debug-12:/mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "com.example.expensify.wear-main-14:/mipmap-anydpi/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.expensify.wear-debug-12:/mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "com.example.expensify.wear-main-14:/mipmap-anydpi/ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-anydpi\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.example.expensify.wear-debug-12:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.example.expensify.wear-main-14:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.expensify.wear-debug-12:/layout_activity_add_expense.xml.flat",
+        "source": "com.example.expensify.wear-main-14:/layout/activity_add_expense.xml"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-debug-12:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\Mayank\\.gradle\\daemon\\9.1.0\\com.example.expensify.wear-main-14:\\drawable\\ic_launcher_background.xml"
+    }
+]

@@ -1,0 +1,18 @@
+R_DEF: Internal format may change without notice
+local
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+id btn_minus
+id btn_plus
+id btn_sync
+id et_amount
+id tv_connection_status
+id tv_select_group
+id tv_selected_member
+layout activity_add_expense
+layout activity_main
+layout spinner_item
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string hello_blank_fragment

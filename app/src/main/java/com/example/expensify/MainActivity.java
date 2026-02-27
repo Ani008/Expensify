@@ -46,23 +46,45 @@ public class MainActivity extends AppCompatActivity {
 
         // 3. Handle Bottom Navigation
         bottomNav.setOnItemSelectedListener(item -> {
+
+            View itemView = findViewById(item.getItemId());
+            if (itemView != null) {
+                // Subtle Lift Animation: Slide up by 8 pixels and back down for others
+                itemView.animate().translationY(-16f).setDuration(200).start();
+
+                // Reset other icons (optional, but makes the 'active' one stand out)
+                for (int i = 0; i < bottomNav.getMenu().size(); i++) {
+                    int id = bottomNav.getMenu().getItem(i).getItemId();
+                    if (id != item.getItemId()) {
+                        View otherView = findViewById(id);
+                        if (otherView != null) otherView.animate().translationY(0f).setDuration(200).start();
+                    }
+                }
+            }
             Fragment selectedFragment = null;
             int id = item.getItemId();
 
             if (id == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
                 fabAdd.setVisibility(View.VISIBLE);
-
-            } else if (id == R.id.nav_settings) {
-                selectedFragment = new Payment();  // 👈 OPEN PAYMENT FRAGMENT
+            }
+            else if (id == R.id.nav_history) {
+                selectedFragment = new SpendingSummaryFragment();
                 fabAdd.setVisibility(View.GONE);
-
-            } else {
+            }
+            else if (id == R.id.nav_settings) {
+                selectedFragment = new Payment();
+                fabAdd.setVisibility(View.GONE);
+            }
+            else {
+                // Default fallback
                 fabAdd.setVisibility(View.GONE);
             }
 
+            // Execute the fragment swap
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out) // Optional: Adds a smooth transition between tabs
                         .replace(R.id.fragment_container, selectedFragment)
                         .commit();
             }
