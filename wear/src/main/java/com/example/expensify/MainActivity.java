@@ -45,12 +45,19 @@ public class MainActivity extends Activity implements
         groupList.add("Loading...");
         tvSelectGroup.setText("Loading... ▼");
 
-        // When the user taps the TextView, show the dialog of groups
+        // Updated click listener to handle the empty state
         tvSelectGroup.setOnClickListener(v -> {
             if (groupList.isEmpty() || groupList.get(0).equals("Loading...")) {
                 Toast.makeText(this, "Waiting for groups from phone...", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            // Prevent opening dialog if there are no groups
+            if (groupList.get(0).equals("No groups created yet")) {
+                Toast.makeText(this, "Create a group on your phone first.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             showGroupSelectionDialog();
         });
     }
@@ -123,15 +130,20 @@ public class MainActivity extends Activity implements
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(PATH_GROUPS_LIST)) {
-            String groupsString = new String(messageEvent.getData(), StandardCharsets.UTF_8);
-            List<String> receivedGroups = Arrays.asList(groupsString.split(","));
+            // Read the string and trim whitespace
+            String groupsString = new String(messageEvent.getData(), StandardCharsets.UTF_8).trim();
 
             runOnUiThread(() -> {
                 groupList.clear();
-                groupList.addAll(receivedGroups);
 
-                // Set the TextView to the first group in the list by default
-                if (!groupList.isEmpty()) {
+                // Check if the phone sent an empty string or a specific "EMPTY" flag
+                if (groupsString.isEmpty() || groupsString.equals("EMPTY")) {
+                    groupList.add("No groups created yet");
+                    tvSelectGroup.setText("No groups created yet");
+                } else {
+                    // Split the comma-separated list and populate
+                    List<String> receivedGroups = Arrays.asList(groupsString.split(","));
+                    groupList.addAll(receivedGroups);
                     tvSelectGroup.setText(groupList.get(0) + " ▼");
                 }
             });
