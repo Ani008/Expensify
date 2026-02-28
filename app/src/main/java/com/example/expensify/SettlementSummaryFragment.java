@@ -354,24 +354,18 @@ public class SettlementSummaryFragment extends Fragment {
 
     /* ------------------------------------------------ */
 
+    // Inside your fetchExpenseAndNames() method
     private void fetchExpenseAndNames() {
-
-        DatabaseReference expenseRef =
-                FirebaseDatabase.getInstance()
-                        .getReference("expenses")
-                        .child(groupId)
-                        .child(expenseId);
-
-        DatabaseReference usersRef =
-                FirebaseDatabase.getInstance()
-                        .getReference("users");
+        DatabaseReference expenseRef = FirebaseDatabase.getInstance().getReference("expenses").child(groupId).child(expenseId);
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+        DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("groups").child(groupId);
 
         expenseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 if (!snapshot.exists()) return;
 
+                // Correctly scoping paidByPhone to fix your "symbol not found" error
                 String title = snapshot.child("title").getValue(String.class);
                 String totalAmt = snapshot.child("amount").getValue(String.class);
                 String paidByPhone = snapshot.child("paidByPhone").getValue(String.class);
@@ -381,61 +375,51 @@ public class SettlementSummaryFragment extends Fragment {
                 tvExpenseAmount.setText("₹" + totalAmt);
 
                 settlementList.clear();
-
                 DataSnapshot splits = snapshot.child("splitDetails");
 
                 for (DataSnapshot ds : splits.getChildren()) {
-
                     String debtorPhone = ds.getKey();
                     String amountOwed = ds.getValue(String.class);
 
-                    if (debtorPhone != null &&
-                            !debtorPhone.equals(paidByPhone)) {
-
-                        Settlement s =
-                                new Settlement(
-                                        debtorPhone,
-                                        debtorPhone,
-                                        paidByName,
-                                        paidByPhone,
-                                        amountOwed);
-
+                    if (debtorPhone != null && !debtorPhone.equals(paidByPhone)) {
+                        // Start with phone as a placeholder
+                        Settlement s = new Settlement(debtorPhone, debtorPhone, paidByName, paidByPhone, amountOwed);
                         settlementList.add(s);
 
-                        usersRef.child(debtorPhone)
-                                .addListenerForSingleValueEvent(
-                                        new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(
-                                                    @NonNull DataSnapshot userSnapshot) {
+                        // --- THE FIX: Prioritize Group Admin Data ---
+                        groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot groupSnapshot) {
+                                String creatorId = groupSnapshot.child("creatorId").getValue(String.class);
+                                String adminNameFromGroup = groupSnapshot.child("adminName").getValue(String.class);
 
-                                                String uName =
-                                                        userSnapshot.child("username")
-                                                                .getValue(String.class);
-
-                                                if (uName != null) {
-                                                    s.fromName =
-                                                            debtorPhone.equals(myPhone)
-                                                                    ? "You"
-                                                                    : uName;
-                                                    adapter.notifyDataSetChanged();
-                                                }
+                                // If this person is the admin, use the name from the screenshot you showed ("Om")
+                                if (debtorPhone.equals(creatorId) && adminNameFromGroup != null) {
+                                    s.fromName = debtorPhone.equals(myPhone) ? "You" : adminNameFromGroup;
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    // Not the admin? Fetch regular username from users node
+                                    usersRef.child(debtorPhone).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                                            String uName = userSnapshot.child("username").getValue(String.class);
+                                            if (uName != null) {
+                                                s.fromName = debtorPhone.equals(myPhone) ? "You" : uName;
+                                                adapter.notifyDataSetChanged();
                                             }
-
-                                            @Override
-                                            public void onCancelled(
-                                                    @NonNull DatabaseError error) {}
-                                        });
+                                        }
+                                        @Override public void onCancelled(@NonNull DatabaseError error) {}
+                                    });
+                                }
+                            }
+                            @Override public void onCancelled(@NonNull DatabaseError error) {}
+                        });
                     }
                 }
-
-                tvSubtitle.setText(
-                        settlementList.size() + " payments found.");
+                tvSubtitle.setText(settlementList.size() + " payments found.");
                 adapter.notifyDataSetChanged();
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            @Override public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 

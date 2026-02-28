@@ -94,11 +94,11 @@ public class HomeFragment extends Fragment {
 
                 groupList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    // Logic: Show if User is Creator OR User is in the Members list
-                    String creatorId = ds.child("creatorId").getValue(String.class);
+                    // A single check is enough: Is the current user's phone in the members node?
+                    // This covers both the Admin (Creator) and invited members.
                     boolean isMember = ds.child("members").hasChild(myPhone);
 
-                    if (myPhone.equals(creatorId) || isMember) {
+                    if (isMember) {
                         GroupSuccessFragment.Group group = ds.getValue(GroupSuccessFragment.Group.class);
                         if (group != null) {
                             groupList.add(group);

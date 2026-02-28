@@ -46,13 +46,17 @@ public class MainActivity extends AppCompatActivity implements MessageClient.OnM
         }
 
         // 2. Handle the "+" button click
+        // 2. Handle the "+" button click
         fabAdd.setOnClickListener(v -> {
-            // When we go to Create Group, hide the FAB
+            // Hide BOTH the FAB and the Bottom Navigation
             fabAdd.setVisibility(View.GONE);
+            if (bottomNav != null) {
+                bottomNav.setVisibility(View.GONE);
+            }
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new CreateGroupFragment())
-                    .addToBackStack(null)
+                    .addToBackStack(null) // This saves the "Home" state
                     .commit();
         });
 
@@ -92,19 +96,15 @@ public class MainActivity extends AppCompatActivity implements MessageClient.OnM
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
             if (currentFragment instanceof HomeFragment) {
-                fabAdd.show();
                 fabAdd.setVisibility(View.VISIBLE);
                 if (bottomNav != null) bottomNav.setVisibility(View.VISIBLE);
             }
-            // ADD THIS EXTRA CHECK HERE
-            else if (currentFragment instanceof SettlementSummaryFragment) {
-                fabAdd.hide();
+            else if (currentFragment instanceof CreateGroupFragment ||
+                    currentFragment instanceof SettlementSummaryFragment ||
+                    currentFragment instanceof invitation) {
+                // Hide for all "Full Screen" fragments
                 fabAdd.setVisibility(View.GONE);
                 if (bottomNav != null) bottomNav.setVisibility(View.GONE);
-            }
-            else {
-                fabAdd.hide();
-                fabAdd.setVisibility(View.GONE);
             }
         });
 

@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="8dp"
-                android:text="Browse Templates >"
+                android:text="Browse Templates"
                 android:textColor="#1A1A1A"
                 android:textSize="14sp"
                 android:textStyle="bold"

@@ -25,6 +25,16 @@ public class TimelineFragment extends Fragment {
     private TextView tvGroupTitle, membersCount, expensesCount, tvEmptyState, tvTotalBalanceStatus;
     private LinearLayout timelineContainer;
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // This tells the MainActivity to hide the bars
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setBottomNavigationAndFabVisibility(View.GONE);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
