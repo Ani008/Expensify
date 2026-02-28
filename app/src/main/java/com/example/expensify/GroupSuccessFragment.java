@@ -3,14 +3,12 @@ package com.example.expensify;
 import android.animation.Keyframe;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class GroupSuccessFragment extends Fragment {
@@ -35,10 +35,12 @@ public class GroupSuccessFragment extends Fragment {
     private String generatedInviteLink;
     private String currentGroupCode;
 
+    // This Model matches your Firebase Screenshot perfectly
     public static class Group {
         public String groupId, groupName, description, creatorId, adminName;
         public int memberCount;
         public long createdAt;
+        public Map<String, Boolean> members; // The sub-node for members
 
         public Group() {}
 
@@ -50,6 +52,10 @@ public class GroupSuccessFragment extends Fragment {
             this.creatorId = creatorId;
             this.adminName = adminName;
             this.createdAt = System.currentTimeMillis();
+
+            // Initialize members list and add the creator immediately
+            this.members = new HashMap<>();
+            this.members.put(creatorId, true);
         }
     }
 
@@ -62,28 +68,28 @@ public class GroupSuccessFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         hideNavigation();
 
-        // Bind Views
+        // 1. Bind Views
         ImageView btnClose = view.findViewById(R.id.btnClose);
         TextView btnCopy = view.findViewById(R.id.btnCopy);
         TextView tvInviteLink = view.findViewById(R.id.tvInviteLink);
         LinearLayout btnShareWhatsapp = view.findViewById(R.id.btnShareWhatsapp);
         AppCompatButton btnTimeline = view.findViewById(R.id.btnTimeline);
 
-        // 1. Generate Link
+        // 2. Generate unique Group ID/Code
         currentGroupCode = generateRandomCode(6);
         generatedInviteLink = "https://expensify-69ebb.web.app/?code=" + currentGroupCode;
         tvInviteLink.setText(generatedInviteLink);
 
-        // 2. Fetch Username and Save (Crucial: This handles the Firebase Save)
+        // 3. Start the save process (Fetch admin name first)
         fetchUsernameAndSaveGroup(currentGroupCode);
 
-        // 3. Animations
+        // 4. Run the premium UI animations
         runPremiumAnimations(view);
 
-        // 4. Click Listeners
+        // 5. Click Listeners
         btnClose.setOnClickListener(v -> getParentFragmentManager().popBackStack());
         btnCopy.setOnClickListener(v -> copyToClipboard(generatedInviteLink));
-        btnShareWhatsapp.setOnClickListener(v -> shareToWhatsApp("Join my group: " + generatedInviteLink));
+        btnShareWhatsapp.setOnClickListener(v -> shareToWhatsApp("Join my group on Expensify: " + generatedInviteLink));
         btnTimeline.setOnClickListener(v -> openTimeline());
     }
 
@@ -93,19 +99,15 @@ public class GroupSuccessFragment extends Fragment {
 
         String phone = args.getString("creatorId", "");
 
-        // Access the users collection using the phone number from your screenshot
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(phone);
-
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String realUsername = "Admin"; // Fallback if user not found
+                String realUsername = "Admin";
                 if (snapshot.exists()) {
-                    // Extract "username" field (e.g., "mayank") from your screenshot
+                    // Pulling "username" field as per your DB structure
                     realUsername = snapshot.child("username").getValue(String.class);
                 }
-
-                // ONLY SAVE NOW that we have the real name
                 saveFinalData(code, realUsername != null ? realUsername : "Admin");
             }
 
@@ -118,15 +120,24 @@ public class GroupSuccessFragment extends Fragment {
 
     private void saveFinalData(String code, String adminName) {
         Bundle args = getArguments();
+        if (args == null) return;
+
         String name = args.getString("groupName", "New Group");
         String desc = args.getString("groupDesc", "");
-        int members = args.getInt("memberCount", 1);
         String creator = args.getString("creatorId", "");
 
-        Group newGroup = new Group(code, name, desc, members, creator, adminName);
+        // We ignore the 'passed' memberCount and set it to 1 initially
+        // because only the Admin is present at creation time.
+        Group newGroup = new Group(code, name, desc, 1, creator, adminName);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups").child(code);
-        ref.setValue(newGroup);
+        ref.setValue(newGroup).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Success! The data is now in Firebase exactly like your screenshot.
+            } else {
+                Toast.makeText(getContext(), "Error saving group", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void runPremiumAnimations(View view) {
@@ -135,22 +146,37 @@ public class GroupSuccessFragment extends Fragment {
         TextView t1 = view.findViewById(R.id.tvTitle);
         TextView t2 = view.findViewById(R.id.tvSubtitle);
 
+        // Initial States
         circle.setTranslationY(150f); circle.setAlpha(0f);
         tick.setAlpha(0f);
         t1.setTranslationY(50f); t1.setAlpha(0f);
         t2.setTranslationY(50f); t2.setAlpha(0f);
 
-        circle.animate().translationY(0f).alpha(1f).setDuration(600).setStartDelay(150).setInterpolator(new OvershootInterpolator()).start();
+        // Circle Entrance
+        circle.animate().translationY(0f).alpha(1f).setDuration(600).setStartDelay(150)
+                .setInterpolator(new OvershootInterpolator()).start();
 
-        PropertyValuesHolder pX = PropertyValuesHolder.ofKeyframe(View.SCALE_X, Keyframe.ofFloat(0f, 1f), Keyframe.ofFloat(.25f, 1.3f), Keyframe.ofFloat(.5f, 0.9f), Keyframe.ofFloat(1f, 1f));
-        PropertyValuesHolder pY = PropertyValuesHolder.ofKeyframe(View.SCALE_Y, Keyframe.ofFloat(0f, 1f), Keyframe.ofFloat(.25f, 1.3f), Keyframe.ofFloat(.5f, 0.9f), Keyframe.ofFloat(1f, 1f));
+        // Tick Throb/Scale effect
+        PropertyValuesHolder pX = PropertyValuesHolder.ofKeyframe(View.SCALE_X,
+                Keyframe.ofFloat(0f, 0f),
+                Keyframe.ofFloat(.2f, 1.3f),
+                Keyframe.ofFloat(.5f, 0.9f),
+                Keyframe.ofFloat(1f, 1f));
+        PropertyValuesHolder pY = PropertyValuesHolder.ofKeyframe(View.SCALE_Y,
+                Keyframe.ofFloat(0f, 0f),
+                Keyframe.ofFloat(.2f, 1.3f),
+                Keyframe.ofFloat(.5f, 0.9f),
+                Keyframe.ofFloat(1f, 1f));
+
         ObjectAnimator throb = ObjectAnimator.ofPropertyValuesHolder(tick, pX, pY);
-        throb.setDuration(800).setStartDelay(200);
+        throb.setDuration(800).setStartDelay(300);
         throb.start();
 
-        tick.animate().alpha(1f).setDuration(150).setStartDelay(200).start();
-        t1.animate().translationY(0f).alpha(1f).setDuration(400).setStartDelay(350).start();
-        t2.animate().translationY(0f).alpha(1f).setDuration(400).setStartDelay(450).start();
+        tick.animate().alpha(1f).setDuration(200).setStartDelay(300).start();
+
+        // Text fade-in
+        t1.animate().translationY(0f).alpha(1f).setDuration(500).setStartDelay(500).start();
+        t2.animate().translationY(0f).alpha(1f).setDuration(500).setStartDelay(650).start();
     }
 
     private String generateRandomCode(int length) {
@@ -164,27 +190,42 @@ public class GroupSuccessFragment extends Fragment {
     private void copyToClipboard(String text) {
         ClipboardManager cb = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
         cb.setPrimaryClip(ClipData.newPlainText("Invite", text));
-        Toast.makeText(getContext(), "Link Copied!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Link Copied to Clipboard!", Toast.LENGTH_SHORT).show();
     }
 
     private void shareToWhatsApp(String msg) {
         Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("text/plain"); i.setPackage("com.whatsapp");
+        i.setType("text/plain");
+        i.setPackage("com.whatsapp");
         i.putExtra(Intent.EXTRA_TEXT, msg);
-        try { startActivity(i); } catch (Exception e) { Toast.makeText(getContext(), "WhatsApp not found", Toast.LENGTH_SHORT).show(); }
+        try {
+            startActivity(i);
+        } catch (Exception e) {
+            // Fallback to general share if WhatsApp is missing
+            Intent generic = new Intent(Intent.ACTION_SEND);
+            generic.setType("text/plain");
+            generic.putExtra(Intent.EXTRA_TEXT, msg);
+            startActivity(Intent.createChooser(generic, "Share via"));
+        }
     }
 
     private void openTimeline() {
         TimelineFragment frag = new TimelineFragment();
-        Bundle b = new Bundle(); b.putString("groupId", currentGroupCode);
+        Bundle b = new Bundle();
+        b.putString("groupId", currentGroupCode);
         frag.setArguments(b);
-        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, frag).commit();
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, frag)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void hideNavigation() {
         if (getActivity() != null) {
-            getActivity().findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
-            getActivity().findViewById(R.id.fab_add).setVisibility(View.GONE);
+            View nav = getActivity().findViewById(R.id.bottom_navigation);
+            View fab = getActivity().findViewById(R.id.fab_add);
+            if (nav != null) nav.setVisibility(View.GONE);
+            if (fab != null) fab.setVisibility(View.GONE);
         }
     }
 }

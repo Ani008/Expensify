@@ -18,6 +18,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -33,12 +35,10 @@ public class invitation extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invitation, container, false);
 
-        // 1. Initialize Views
         tvInviteGroupName = view.findViewById(R.id.tvInviteGroupName);
         tvInviterName = view.findViewById(R.id.tvInviterName);
         tvInviteSize = view.findViewById(R.id.tvInviteSize);
 
-        // 2. Get Code from Deep Link
         if (getArguments() != null) {
             groupId = getArguments().getString("GROUP_CODE");
         }
@@ -51,12 +51,11 @@ public class invitation extends Fragment {
             Toast.makeText(getContext(), "Invalid Invitation Link", Toast.LENGTH_SHORT).show();
         }
 
-        // 3. Button Logic
         view.findViewById(R.id.btnJoinInvite).setOnClickListener(v -> joinGroupLogic());
 
         view.findViewById(R.id.btnRejectInvite).setOnClickListener(v -> {
-            if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().popBackStack();
+            if (getParentFragmentManager() != null) {
+                getParentFragmentManager().popBackStack();
             }
         });
 
@@ -64,8 +63,6 @@ public class invitation extends Fragment {
     }
 
     private void fetchGroupDetails() {
-        Log.d("INVITE_DEBUG", "Fetching details for code: " + groupId);
-
         DatabaseReference specificGroupRef = groupsRef.child(groupId);
         specificGroupRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -73,13 +70,13 @@ public class invitation extends Fragment {
                 if (snapshot.exists() && isAdded()) {
                     String name = snapshot.child("groupName").getValue(String.class);
                     String creator = snapshot.child("adminName").getValue(String.class);
-                    if (creator == null) creator = "Group Admin";
 
-                    long membersCount = snapshot.child("members").getChildrenCount();
+                    // Get count from the actual 'memberCount' field we created earlier
+                    Long count = snapshot.child("memberCount").getValue(Long.class);
 
                     tvInviteGroupName.setText(name);
-                    tvInviterName.setText(creator);
-                    tvInviteSize.setText(membersCount + " members");
+                    tvInviterName.setText(creator != null ? creator : "Group Admin");
+                    tvInviteSize.setText((count != null ? count : 0) + " members");
                 } else {
                     Toast.makeText(getContext(), "Group not found", Toast.LENGTH_SHORT).show();
                 }
@@ -93,7 +90,6 @@ public class invitation extends Fragment {
     }
 
     private void joinGroupLogic() {
-        // 1. Get logged-in user's phone from SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("ExpensifyPrefs", Context.MODE_PRIVATE);
         String userPhone = sharedPreferences.getString("loggedInPhone", "");
 
@@ -102,45 +98,61 @@ public class invitation extends Fragment {
             return;
         }
 
-        // 2. Fetch joining user's username from the "users" node
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userPhone);
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String joiningUserName = "New Member";
-                if (snapshot.exists()) {
-                    joiningUserName = snapshot.child("username").getValue(String.class);
-                }
+        // Check if already a member first to avoid double counting
+        groupsRef.child(groupId).child("members").child(userPhone)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Toast.makeText(getContext(), "You are already a member!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            performTransactionJoin(userPhone);
+                        }
+                    }
 
-                // 3. Add to Firebase members list
-                addUserToGroupMembers(userPhone, joiningUserName);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error fetching user data", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
     }
 
-    private void addUserToGroupMembers(String phone, String name) {
-        // Path: groups -> [groupId] -> members -> [phone]
-        DatabaseReference memberRef = groupsRef.child(groupId).child("members").child(phone);
+    /**
+     * Uses a Firebase Transaction to safely increment the memberCount
+     * while adding the user to the members list.
+     */
+    private void performTransactionJoin(String userPhone) {
+        DatabaseReference groupRootRef = groupsRef.child(groupId);
 
-        HashMap<String, Object> memberData = new HashMap<>();
-        memberData.put("name", name);
-        memberData.put("phone", phone);
-        memberData.put("joinedAt", System.currentTimeMillis());
+        groupRootRef.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                if (currentData.getValue() == null) {
+                    return Transaction.success(currentData);
+                }
 
-        memberRef.setValue(memberData).addOnSuccessListener(aVoid -> {
-            Toast.makeText(getContext(), "Welcome to " + tvInviteGroupName.getText() + "!", Toast.LENGTH_SHORT).show();
+                // 1. Increment the memberCount integer
+                Integer currentCount = currentData.child("memberCount").getValue(Integer.class);
+                if (currentCount == null) currentCount = 0;
+                currentData.child("memberCount").setValue(currentCount + 1);
 
-            // Go back to Home/MainActivity
-            if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                // 2. Add user to the 'members' map
+                // We store 'true' to keep the structure light, matching the screenshot
+                currentData.child("members").child(userPhone).setValue(true);
+
+                return Transaction.success(currentData);
             }
-        }).addOnFailureListener(e -> {
-            Toast.makeText(getContext(), "Join failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentSnapshot) {
+                if (committed) {
+                    Toast.makeText(getContext(), "Joined successfully!", Toast.LENGTH_SHORT).show();
+                    if (getActivity() != null) {
+                        getParentFragmentManager().popBackStack();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Join failed: " + (error != null ? error.getMessage() : "unknown"), Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
 }

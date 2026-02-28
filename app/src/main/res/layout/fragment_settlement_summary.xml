@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
@@ -76,6 +77,7 @@
                 android:textSize="10sp"
                 android:textStyle="bold" />
             <TextView
+                android:id="@+id/tvExpenseAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lblTotal"
@@ -113,83 +115,28 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Transactions List -->
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSettlements"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="24dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/lblPending">
+        app:layout_constraintTop_toBottomOf="@id/lblPending"
 
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="16dp">
-            <TextView android:id="@+id/name1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ravi" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold"/>
-            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_toEndOf="@id/name1" android:layout_marginStart="12dp" android:layout_centerVertical="true" android:src="@drawable/arrow_right" app:tint="#CCCCCC" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/name1" android:layout_marginStart="44dp" android:text="Anita" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₹500" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold"/>
-        </RelativeLayout>
-
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" />
-
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="16dp">
-            <TextView android:id="@+id/name2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Siddharth" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold"/>
-            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_toEndOf="@id/name2" android:layout_marginStart="12dp" android:layout_centerVertical="true" android:src="@drawable/arrow_right" app:tint="#CCCCCC" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/name2" android:layout_marginStart="44dp" android:text="Anita" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₹2,800" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold"/>
-        </RelativeLayout>
-
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" />
-
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="16dp">
-            <TextView android:id="@+id/name3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Me" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold"/>
-            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_toEndOf="@id/name3" android:layout_marginStart="12dp" android:layout_centerVertical="true" android:src="@drawable/arrow_right" app:tint="#CCCCCC" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/name3" android:layout_marginStart="44dp" android:text="Ravi" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₹950" android:textColor="#1A1A1A" android:textSize="18sp" android:textStyle="bold"/>
-        </RelativeLayout>
-
-        <!-- Info Box -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/dashed_placeholder_bg"
-            android:padding="16dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_dialog_info" app:tint="#999999" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:text="Calculated using minimal transactions algorithm.\nEveryone will be settled in 3 transfers."
-                android:textColor="#999999"
-                android:textSize="11sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Bottom Buttons -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnPay"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/black_button_bg"
-        android:text="Pay via UPI"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/btnShare" />
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnShare"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/search_bg"
         android:text="Share Summary"
         android:textAllCaps="false"
         android:textColor="#1A1A1A"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

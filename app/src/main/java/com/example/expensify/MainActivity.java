@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements MessageClient.OnM
                     .commit();
         });
 
+
         // 3. Handle Bottom Navigation
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
@@ -114,6 +115,16 @@ public class MainActivity extends AppCompatActivity implements MessageClient.OnM
         Wearable.getMessageClient(this).removeListener(this);
     }
 
+    // Add this inside MainActivity.java
+    public void setBottomNavigationAndFabVisibility(int visibility) {
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        if (bottomNav != null) {
+            bottomNav.setVisibility(visibility);
+        }
+        if (fabAdd != null) {
+            fabAdd.setVisibility(visibility);
+        }
+    }
     // Catch the message sent directly from the watch
     @Override
     public void onMessageReceived(@NonNull MessageEvent messageEvent) {
