@@ -39,6 +39,12 @@ public class PhoneWearableListenerService extends WearableListenerService {
             // Watch asked for the groups dropdown list
             sendGroupsToWatch(messageEvent.getSourceNodeId());
 
+        } else if (path.equals(PATH_REQUEST_MEMBERS)) {
+            // THIS WAS MISSING! Watch asked for members of a specific group
+            String groupName = new String(messageEvent.getData(), StandardCharsets.UTF_8);
+            Log.d(TAG, "Fetching members for group: " + groupName);
+            fetchGroupMembers(groupName, messageEvent.getSourceNodeId());
+
         } else if (path.equals(PATH_ADD_EXPENSE)) {
             // Watch sent a new expense to save
             String payload = new String(messageEvent.getData(), StandardCharsets.UTF_8);
@@ -85,6 +91,102 @@ public class PhoneWearableListenerService extends WearableListenerService {
         });
     }
 
+    // Add these constants at the top
+    private static final String PATH_REQUEST_MEMBERS = "/request_group_members";
+    private static final String PATH_MEMBERS_LIST = "/group_members_list";
+    // --- NEW METHODS FOR FETCHING MEMBERS ---
+
+    private void fetchGroupMembers(String groupName, String watchNodeId) {
+        DatabaseReference groupsRef = FirebaseDatabase.getInstance().getReference("groups");
+
+        // 1. Find the group by its name
+        groupsRef.orderByChild("groupName").equalTo(groupName)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (DataSnapshot groupSnapshot : snapshot.getChildren()) {
+
+                                // IMPORTANT: Adjust "members" to match whatever you named the node inside the group
+                                DataSnapshot membersNode = groupSnapshot.child("members");
+                                List<String> phoneNumbers = new ArrayList<>();
+
+                                for (DataSnapshot memberSnap : membersNode.getChildren()) {
+                                    // If you store members like { "+919876543210": true }, use getKey()
+                                    // If you store them in an array/list, use getValue(String.class)
+                                    String phone = memberSnap.getValue(String.class);
+                                    if (phone != null) {
+                                        phoneNumbers.add(phone);
+                                    }
+                                }
+
+                                // 2. Pass the phone numbers to the next function to get the names
+                                fetchNamesFromUsersCollection(phoneNumbers, watchNodeId);
+                                break;
+                            }
+                        } else {
+                            sendPayloadToWatch(watchNodeId, PATH_MEMBERS_LIST, "EMPTY");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "Failed to fetch group: " + error.getMessage());
+                    }
+                });
+    }
+
+    private void fetchNamesFromUsersCollection(List<String> phoneNumbers, String watchNodeId) {
+        if (phoneNumbers.isEmpty()) {
+            sendPayloadToWatch(watchNodeId, PATH_MEMBERS_LIST, "EMPTY");
+            return;
+        }
+
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users"); // Adjust to your users collection name
+        List<String> memberNames = new ArrayList<>();
+
+        // We use an array to hold the counter because it must be effectively final inside the listener
+        final int[] pendingQueries = {phoneNumbers.size()};
+
+        for (String phone : phoneNumbers) {
+
+            // Assuming the phone number is the KEY in the Users collection
+            usersRef.child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        // IMPORTANT: Adjust "name" to match your user's name field in Firebase
+                        String name = snapshot.child("name").getValue(String.class);
+                        if (name != null) {
+                            memberNames.add(name);
+                        }
+                    } else {
+                        memberNames.add("Unknown (" + phone + ")");
+                    }
+
+                    // Decrease our counter. If it hits 0, all names are fetched!
+                    pendingQueries[0]--;
+                    if (pendingQueries[0] == 0) {
+                        String namesString = TextUtils.join(",", memberNames);
+                        sendPayloadToWatch(watchNodeId, PATH_MEMBERS_LIST, namesString);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    pendingQueries[0]--;
+                }
+            });
+        }
+    }
+
+    // Helper method to send any path/payload combination to the watch
+    private void sendPayloadToWatch(String watchNodeId, String path, String payloadString) {
+        byte[] payload = payloadString.getBytes(StandardCharsets.UTF_8);
+        Wearable.getMessageClient(this).sendMessage(watchNodeId, path, payload)
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to send data to watch on " + path, e));
+    }
+
     // Helper method to keep the sending logic clean
     private void sendPayloadToWatch(String watchNodeId, String payloadString) {
         byte[] payload = payloadString.getBytes(StandardCharsets.UTF_8);
@@ -115,7 +217,7 @@ public class PhoneWearableListenerService extends WearableListenerService {
                     ", Member: " + member +
                     ", Group: " + groupName);
 
-            DatabaseReference groupsRef = FirebaseDatabase.getInstance().getReference("Groups");
+            DatabaseReference groupsRef = FirebaseDatabase.getInstance().getReference("groups");
 
             // 1. Search Firebase for the group that matches the name sent by the watch
             // IMPORTANT: "groupName" must exactly match the key in your Firebase structure
