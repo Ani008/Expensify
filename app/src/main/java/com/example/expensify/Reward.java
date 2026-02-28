@@ -11,11 +11,10 @@ import com.google.android.material.button.MaterialButton;
 
 public class Reward extends Fragment {
 
-    // IMPORTANT: You must inflate the layout here!
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Replace 'fragment_reward' with the actual name of your XML file
+        // Inflates the first screen (the one with the 25 points circle)
         return inflater.inflate(R.layout.fragment_reward, container, false);
     }
 
@@ -23,15 +22,13 @@ public class Reward extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Initialize the button
         MaterialButton btnGoToStore = view.findViewById(R.id.btnGoToStore);
 
-        // 2. Set the click listener
         if (btnGoToStore != null) {
             btnGoToStore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Make sure your RewardStore fragment class name matches exactly (rewardStore)
+                    // Navigate to the store fragment
                     rewardStore storeFragment = new rewardStore();
 
                     getParentFragmentManager().beginTransaction()

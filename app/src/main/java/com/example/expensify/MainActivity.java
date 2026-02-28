@@ -86,12 +86,24 @@ public class MainActivity extends AppCompatActivity implements MessageClient.OnM
             return true;
         });
 
-        // 4. Re-show the FAB when the user returns to Home
+
+// 4. Re-show the FAB ONLY when the user is truly on the HomeFragment
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
             if (currentFragment instanceof HomeFragment) {
+                fabAdd.show();
                 fabAdd.setVisibility(View.VISIBLE);
-            } else {
+                if (bottomNav != null) bottomNav.setVisibility(View.VISIBLE);
+            }
+            // ADD THIS EXTRA CHECK HERE
+            else if (currentFragment instanceof SettlementSummaryFragment) {
+                fabAdd.hide();
+                fabAdd.setVisibility(View.GONE);
+                if (bottomNav != null) bottomNav.setVisibility(View.GONE);
+            }
+            else {
+                fabAdd.hide();
                 fabAdd.setVisibility(View.GONE);
             }
         });
@@ -118,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements MessageClient.OnM
     // Add this inside MainActivity.java
     public void setBottomNavigationAndFabVisibility(int visibility) {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        FloatingActionButton fabAdd = findViewById(R.id.fab_add);
         if (bottomNav != null) {
             bottomNav.setVisibility(visibility);
         }
